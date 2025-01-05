@@ -37,6 +37,8 @@ namespace VideoProjector.Configuration.ModelsConfiguration
                 .WithOne(o => o.Customer)
                 .HasForeignKey(o => o.CustomerId)
                 .OnDelete(DeleteBehavior.Cascade);
+            
+            
         }
     }
 }

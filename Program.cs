@@ -1,5 +1,4 @@
-using VideoProjector.Configuration.Db;
-using VideoProjector.Configuration.IdentityLibrary;
+using VideoProjector.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +14,8 @@ builder.Services.AddOpenApi();
 builder.Services.ConfigureDbContext(builder.Configuration);
 // --------------------------- Identity configure --------------------------- //
 builder.Services.ConfigureIdentity();
+// --------------------------- Jwt configure --------------------------- //
+builder.Services.ConfigureJwtAuthentication(builder.Configuration);
 
 // =========================== Configuration Folder =========================== //
 
@@ -33,5 +34,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
 

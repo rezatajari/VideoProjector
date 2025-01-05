@@ -2,7 +2,7 @@
 using VideoProjector.Data;
 
 
-namespace VideoProjector.Configuration.Db
+namespace VideoProjector.Configuration
 {
     public static class DatabaseConfiguration
     {
