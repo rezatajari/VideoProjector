@@ -8,6 +8,7 @@ VideoProjector is a web application for managing video projector products, order
 - Product management
 - Order processing
 - Shopping cart
+- Application logging
 
 ## Setup Instructions
 1. Clone the repository:
