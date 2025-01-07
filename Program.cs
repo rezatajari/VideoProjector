@@ -1,3 +1,4 @@
+using Serilog;
 using VideoProjector.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,9 @@ builder.Services.ConfigureDbContext(builder.Configuration);
 builder.Services.ConfigureIdentity();
 // --------------------------- Jwt configure --------------------------- //
 builder.Services.ConfigureJwtAuthentication(builder.Configuration);
+// --------------------------- Logger configure --------------------------- //
+LoggerConfig.ConfigureLogger(builder.Configuration);
+builder.Host.UseSerilog(); // Replace default .NET logger with Serilog
 
 // =========================== Configuration Folder =========================== //
 
