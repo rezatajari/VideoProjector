@@ -1,5 +1,6 @@
 using Serilog;
 using VideoProjector.Configuration;
+using VideoProjector.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,9 @@ builder.Host.UseSerilog(); // Replace default .NET logger with Serilog
 // =========================== Configuration Folder =========================== //
 
 var app = builder.Build();
+
+// Use custom error handling middleware
+app.UseMiddleware<ErrorHandling>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
