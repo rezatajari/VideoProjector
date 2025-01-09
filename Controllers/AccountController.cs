@@ -22,9 +22,5 @@ namespace VideoProjector.Controllers
         }
 
 
-
-        //TODO: Create a general response for all methods
-        //TODO: Implement of IAccountService
-
     }
 }
