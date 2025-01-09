@@ -1,37 +1,43 @@
 # VideoProjector
 
-## Project Description
-VideoProjector is a web application for managing video projector products, orders, and customer information.
+## Introduction
+This is a project for managing video projections.
 
-## Features
-- User authentication
-- Product management
-- Order processing
-- Shopping cart
-- Application logging
-- Application Error handling
+## Prerequisites
+- .NET Core SDK
+- SQL Server
 
-## Setup Instructions
+## Getting Started
+
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/VideoProjector.git
+    git clone https://github.com/your-repo/VideoProjector.git
     ```
+
 2. Navigate to the project directory:
     ```sh
     cd VideoProjector
     ```
-3. Update the connection string in `appsettings.json`.
-4. Apply the migrations:
+
+3. Restore the dependencies:
     ```sh
-    dotnet ef database update
+    dotnet restore
     ```
+
+4. Build the project:
+    ```sh
+    dotnet build
+    ```
+
 5. Run the application:
     ```sh
     dotnet run
     ```
 
-## Database Information
-For detailed information about the database schema and entities, please refer to the Database Documentation in the `docs` folder.
+## Documentation
+For more detailed documentation, please refer to the following files in the `doc` folder:
+- [Database Documentation](https://github.com/rezatajari/VideoProjector/blob/master/docs/DATABASE.md)
+- [Response Center Documentation](https://github.com/rezatajari/VideoProjector/blob/master/docs/ResponseCenter.md)
 
 ## Contributing
 Fork the repository and submit a pull request.
