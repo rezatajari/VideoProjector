@@ -6,5 +6,6 @@ namespace VideoProjector.Services.Interfaces
     public interface IAccountService
     {
         Task<ResponseCenter<string>> Login(LoginDto loginDto);
+        Task<ResponseCenter<string>> Register(RegisterDto registerDto);
     }
 }

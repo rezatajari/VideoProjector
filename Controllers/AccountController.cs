@@ -6,13 +6,13 @@ using VideoProjector.Services.Impelements;
 
 namespace VideoProjector.Controllers
 {
-    [Route("api/[controller]")]
+    [Route(template: "api/[controller]")]
     [ApiController]
     public class AccountController(AccountService accountService) : ControllerBase
     {
         // Endpoint for user login
         [Authorize]
-        [Route(template:"account/login"), HttpPost]
+        [Route(template: "account/login"), HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             // Validate the model state
@@ -38,6 +38,29 @@ namespace VideoProjector.Controllers
             // Return an OK response with the success details
             return Ok(result);
         }
+
+
+        // Endpoint for user registration
+        [Route(template: "account/register"), HttpPost]
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ResponseCenter.CreateErrorResponse<RegisterDto>(
+                    message: "Validation failed",
+                    errorCode: "VALIDATION_ERROR",
+                    validationErrors: ModelState.Values.SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .ToList()));
+
+            var result = await accountService.Register(registerDto);
+
+            if (result.Status == "Error")
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+
+
 
     }
 }
