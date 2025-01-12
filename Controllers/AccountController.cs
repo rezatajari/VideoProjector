@@ -1,26 +1,43 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using VideoProjector.Common;
+using VideoProjector.DTOs;
 using VideoProjector.Services.Impelements;
 
 namespace VideoProjector.Controllers
 {
-    [Route(template: "api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccountController(AccountService accountService) : ControllerBase
     {
-
-        [Route(template:"account/login"),HttpPost]
-        public IActionResult Login(string email, string password)
+        // Endpoint for user login
+        [Authorize]
+        [Route(template:"account/login"), HttpPost]
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            EntityEntry entityEntry = accountService.Login(email, password);
-            if (entityEntry == null)
+            // Validate the model state
+            if (!ModelState.IsValid)
             {
-                return StatusCode(StatusCodes.Status401Unauthorized);
+                // Return a bad request response with validation errors
+                return BadRequest(ResponseCenter.CreateErrorResponse<LoginDto>(
+                  message: "Validation failed",
+                  errorCode: "VALIDATION_ERROR",
+                  validationErrors: ModelState.Values.SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .ToList()));
             }
-            return StatusCode(StatusCodes.Status200OK);
-        }
 
+            // Call the login method in the AccountService
+            var result = await accountService.Login(loginDto);
+
+            // Check if the login was unsuccessful
+            if (result.Status == "Error")
+                // Return a bad request response with the error details
+                return BadRequest(result);
+
+            // Return an OK response with the success details
+            return Ok(result);
+        }
 
     }
 }

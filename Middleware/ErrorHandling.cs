@@ -22,7 +22,7 @@
 
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            Log.Error(exception, "An unhandled exception occurred.");
+            Log.Error(exception, messageTemplate: "An unhandled exception occurred.");
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

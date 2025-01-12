@@ -7,14 +7,14 @@ namespace VideoProjector.Services.Impelements
 {
     public class JwtTokenService(IConfiguration configuration)
     {
-        public string GenerateToken(string userId, string email)
+        public string GenerateToken(string customerId, string email)
         {
             var jwtSettings = configuration.GetSection("JwtSettings");
             var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userId),
+                new Claim(JwtRegisteredClaimNames.Sub, customerId),
                 new Claim(JwtRegisteredClaimNames.Email, email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
