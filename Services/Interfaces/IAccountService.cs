@@ -7,5 +7,6 @@ namespace VideoProjector.Services.Interfaces
     {
         Task<ResponseCenter<string>> Login(LoginDto loginDto);
         Task<ResponseCenter<string>> Register(RegisterDto registerDto);
+        Task<ResponseCenter<string>> ConfirmEmail(string customerId, string token);
     }
 }

@@ -6,13 +6,13 @@ using VideoProjector.Services.Impelements;
 
 namespace VideoProjector.Controllers
 {
-    [Route(template: "api/[controller]")]
+    [Route(template: "api/account")]
     [ApiController]
     public class AccountController(AccountService accountService) : ControllerBase
     {
         // Endpoint for user login
         [Authorize]
-        [Route(template: "account/login"), HttpPost]
+        [HttpPost(template: "login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             // Validate the model state
@@ -41,7 +41,7 @@ namespace VideoProjector.Controllers
 
 
         // Endpoint for user registration
-        [Route(template: "account/register"), HttpPost]
+        [HttpPost(template: "register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             if (!ModelState.IsValid)
@@ -60,7 +60,19 @@ namespace VideoProjector.Controllers
             return Ok(result);
         }
 
+        [HttpPost(template: "confirm-email")]
+        public async Task<IActionResult> ConfirmEmail(string customerId, string token)
+        {
+            if (string.IsNullOrEmpty(customerId) || string.IsNullOrEmpty(token))
+                return BadRequest(ResponseCenter.CreateErrorResponse<string>(
+                    message: "Invalid email confirmation request.",
+                    errorCode: "NULL_OR_EMPTY"));
 
+            var result = await accountService.ConfirmEmail(customerId, token);
 
+            if (result.Status == "Error")
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

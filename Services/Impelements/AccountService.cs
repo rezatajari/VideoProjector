@@ -3,8 +3,10 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using Azure.Identity;
 using VideoProjector.Common;
 using VideoProjector.DTOs;
 using VideoProjector.Models;
@@ -113,6 +115,7 @@ namespace VideoProjector.Services.Impelements
             }
         }
 
+
         // Method to send email confirmation
         private async Task<ResponseCenter<string>> SendEmailConfirmation(Customer customer)
         {
@@ -125,21 +128,51 @@ namespace VideoProjector.Services.Impelements
                 var frontendUrl = "http://localhost:5098";
                 var confirmationLink = $"{frontendUrl}/confirm-email?customerId={customer.Id}&token={WebUtility.UrlEncode(token)}";
 
-                // Send the confirmation email
                 await emailConfirmationService.SendConfirmationEmailAsync(customer.Email, "Confirm your email", $"Please confirm your email by clicking <a href='{confirmationLink}'>here</a>.");
 
-                // Log the successful email confirmation
                 return ResponseCenter.CreateSuccessResponse(data: string.Empty);
             }
             catch (Exception ex)
             {
-                // Log a warning for a failed email confirmation attempt
-                logger.LogWarning("Failed to send email confirmation to: {Email}", customer.Email);
-
-                // Return an error response for failed email confirmation
+                logger.LogError("Failed to send email confirmation to: {Email}", customer.Email);
                 return ResponseCenter.CreateErrorResponse<string>(
                     message: "Customer created, but failed to send confirmation email.",
                     errorCode: "EMAIL_CONFIRMATION_ERROR");
+            }
+        }
+
+        public async Task<ResponseCenter<string>> ConfirmEmail(string customerId, string token)
+        {
+            try
+            {
+                // Find customer
+                var customer = await userManager.FindByIdAsync(customerId);
+                if (customer == null)
+                    return ResponseCenter.CreateErrorResponse<string>(
+                        message: "Customer not found",
+                        errorCode: "NOT_FOUND");
+
+                // Confirmation email
+                var result = await userManager.ConfirmEmailAsync(customer, token);
+                if (!result.Succeeded)
+                    return ResponseCenter.CreateErrorResponse<string>(
+                        message: "Failed to confirm email",
+                        errorCode: "CONFIRMATION_ERROR",
+                        validationErrors: result.Errors.Select(e => e.Description).ToList());
+
+                // Successful confirmed
+                logger.LogInformation("Email confirmation is successful for the customerId {CustomerId}", customerId);
+                return ResponseCenter.CreateSuccessResponse(
+                    data: "Email confirmed successfully.",
+                    message: "EMAIL_CONFIRMED");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Failed to confirmation customerId: {CustomerId}", customerId);
+                return ResponseCenter.CreateErrorResponse<string>(
+                    message: "Confirmation email failed",
+                    errorCode: "CONFIRMATION_ERROR");
+
             }
         }
     }
