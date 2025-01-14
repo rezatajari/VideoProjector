@@ -36,8 +36,20 @@ namespace VideoProjector.Controllers
             }
         }
 
+        [HttpGet(template: "edit")]
+        public async Task<IActionResult> Edit()
+        {
+            var customerId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var result = await profileService.GetEditProfile(customerId);
+
+            if (result.Status == "Error")
+                return BadRequest(result);
+            return Ok(result);
+
+        }
+
         [HttpPatch(template: "edit")]
-        public async Task<IActionResult> Edit([FromBody] EditDto editDto)
+        public async Task<IActionResult> Edit([FromForm] EditDto editDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ResponseCenter.CreateErrorResponse<EditDto>(
@@ -55,7 +67,25 @@ namespace VideoProjector.Controllers
             return Ok(result);
         }
 
+        [HttpPatch(template: "update-password")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordDto updatePassword)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ResponseCenter.CreateErrorResponse<UpdatePasswordDto>(
+                    message: "Validation failed",
+                    errorCode: "VALIDATION_ERROR",
+                    validationErrors: ModelState.Values.SelectMany(v => v.Errors).
+                        Select(e => e.ErrorMessage).
+                        ToList()));
 
-        // Change password endpoint
+            var customerId = User.FindFirst(type: ClaimTypes.NameIdentifier)?.Value;
+
+            var result = await profileService.UpdatePassword(updatePassword, customerId!);
+
+            if (!result.Data.Succeeded)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
     }
 }

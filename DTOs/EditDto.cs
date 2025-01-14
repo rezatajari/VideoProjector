@@ -12,5 +12,6 @@ namespace VideoProjector.DTOs
         public required string Email { get; set; }
         public string? Address { get; set; }
         public IFormFile? ProfilePicture { get; set; }
+        public string? CurrentProfilePicturePath { get; set; } // Existing file path
     }
 }
