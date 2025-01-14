@@ -18,7 +18,6 @@ namespace VideoProjector.Services.Impelements
                    EmailConfirmationService emailConfirmationService, JwtTokenService jwtToken) : IAccountService
     {
 
-        // Method to handle customer login
         public async Task<ResponseCenter<string>> Login(LoginDto loginDto)
         {
             try
@@ -29,37 +28,36 @@ namespace VideoProjector.Services.Impelements
                 // Check if the customer exists and the password is correct
                 if (customer == null || !await userManager.CheckPasswordAsync(customer, loginDto.Password))
                 {
-                    // Log a warning for a failed login attempt
                     logger.LogWarning("Failed login attempt for email: {Email}", loginDto.Email);
-
-                    // Return an error response for invalid credentials
                     return ResponseCenter.CreateErrorResponse<string>(
                         message: "Invalid email or password.",
                         errorCode: "INVALID_CREDENTIALS");
                 }
 
+                // Check if email is confirmed
+                if (!await userManager.IsEmailConfirmedAsync(customer))
+                {
+                    logger.LogWarning("Login failed: Email not confirmed for user {Email}", customer.Email);
+                    return ResponseCenter.CreateErrorResponse<string>(
+                        message: "Please confirm your email before logging in.",
+                        errorCode: "EMAIL_NOT_CONFIRMED");
+                }
+
                 // Generate a JWT token for the customer
                 var token = jwtToken.GenerateToken(customer.Id, customer.Email);
 
-                // Log the successful login
                 logger.LogInformation("Customer logged in: {Email}", loginDto.Email);
-
-                // Return a success response with the token
                 return ResponseCenter.CreateSuccessResponse(data: token, message: "Logged");
             }
             catch (Exception ex)
             {
-                // Log the exception
                 logger.LogError(ex, message: "An error occurred while logging in.");
-
-                // Return an error response for the exception
                 return ResponseCenter.CreateErrorResponse<string>(
                     message: "An error occurred while logging in.",
                     errorCode: "LOGIN_ERROR");
             }
         }
 
-        // Method to handle customer registration
         public async Task<ResponseCenter<string>> Register(RegisterDto registerDto)
         {
             try
@@ -116,7 +114,6 @@ namespace VideoProjector.Services.Impelements
         }
 
 
-        // Method to send email confirmation
         private async Task<ResponseCenter<string>> SendEmailConfirmation(Customer customer)
         {
             try
