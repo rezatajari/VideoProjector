@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace VideoProjector.DTOs
+namespace VideoProjector.DTOs.Profile
 {
     public class ProfileDto
     {

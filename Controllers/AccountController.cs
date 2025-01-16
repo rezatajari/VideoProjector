@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VideoProjector.Common;
-using VideoProjector.DTOs;
-using VideoProjector.Services.Impelements;
+using VideoProjector.DTOs.Account;
+using VideoProjector.Services.Impelements.Account;
+using VideoProjector.Services.Interfaces;
 
 namespace VideoProjector.Controllers
 {
     [Route(template: "api/account")]
     [ApiController]
-    public class AccountController(AccountService accountService) : ControllerBase
+    public class AccountController(IAccountService accountService) : ControllerBase
     {
         // Endpoint for user login
         [Authorize]

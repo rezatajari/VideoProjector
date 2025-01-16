@@ -8,11 +8,11 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Azure.Identity;
 using VideoProjector.Common;
-using VideoProjector.DTOs;
 using VideoProjector.Models;
 using VideoProjector.Services.Interfaces;
+using VideoProjector.DTOs.Account;
 
-namespace VideoProjector.Services.Impelements
+namespace VideoProjector.Services.Impelements.Account
 {
     public class AccountService(UserManager<Customer> userManager, ILogger<AccountService> logger,
                    EmailConfirmationService emailConfirmationService, JwtTokenService jwtToken) : IAccountService

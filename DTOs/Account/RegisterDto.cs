@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using VideoProjector.Models;
 
-namespace VideoProjector.DTOs
+namespace VideoProjector.DTOs.Account
 {
     public class RegisterDto
     {

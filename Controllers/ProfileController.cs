@@ -3,15 +3,16 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VideoProjector.Common;
-using VideoProjector.DTOs;
+using VideoProjector.DTOs.Profile;
 using VideoProjector.Services.Impelements;
+using VideoProjector.Services.Interfaces;
 
 namespace VideoProjector.Controllers
 {
     [Route(template: "api/profile")]
     [ApiController]
     [Authorize]
-    public class ProfileController(ProfileService profileService) : ControllerBase
+    public class ProfileController(IProfileService profileService) : ControllerBase
     {
 
         [HttpGet(template: "details")]

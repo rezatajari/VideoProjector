@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace VideoProjector.Services.Impelements
+namespace VideoProjector.Services.Impelements.Account
 {
     public class JwtTokenService(IConfiguration configuration)
     {

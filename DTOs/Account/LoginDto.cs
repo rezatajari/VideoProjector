@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace VideoProjector.DTOs
+namespace VideoProjector.DTOs.Account
 {
     public class LoginDto
     {

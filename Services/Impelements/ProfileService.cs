@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using VideoProjector.Common;
-using VideoProjector.DTOs;
+using VideoProjector.DTOs.Profile;
 using VideoProjector.Models;
 using VideoProjector.Services.Interfaces;
 

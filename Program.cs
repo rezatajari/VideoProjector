@@ -1,7 +1,10 @@
 using Serilog;
 using VideoProjector.Configuration;
+using VideoProjector.Data.Repositories.Implementations;
+using VideoProjector.Data.Repositories.Interfaces;
 using VideoProjector.Middleware;
 using VideoProjector.Services.Impelements;
+using VideoProjector.Services.Impelements.Account;
 using VideoProjector.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +17,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 // =========================== Configuration Folder =========================== //
 

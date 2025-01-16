@@ -24,8 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Repositories\Interfaces\" />
-    <Folder Include="Data\Repositories\Implementations\" />
     <Folder Include="Common\" />
     <Folder Include="Tests\IntegrationTests\" />
     <Folder Include="Tests\UnitTests\" />

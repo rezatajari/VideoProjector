@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using VideoProjector.Common;
-using VideoProjector.DTOs;
+using VideoProjector.DTOs.Profile;
 
 namespace VideoProjector.Services.Interfaces
 {

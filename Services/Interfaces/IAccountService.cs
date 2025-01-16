@@ -1,5 +1,5 @@
 ﻿using VideoProjector.Common;
-using VideoProjector.DTOs;
+using VideoProjector.DTOs.Account;
 
 namespace VideoProjector.Services.Interfaces
 {

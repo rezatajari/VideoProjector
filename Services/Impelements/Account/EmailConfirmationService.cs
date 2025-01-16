@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace VideoProjector.Services.Impelements
+namespace VideoProjector.Services.Impelements.Account
 {
     public class EmailConfirmationService(IConfiguration configuration, ILogger<EmailConfirmationService> logger)
     {
