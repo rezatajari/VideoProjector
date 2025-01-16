@@ -15,10 +15,16 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// -------- Account -------- //
 builder.Services.AddScoped<IAccountService, AccountService>();
+// -------- Profile -------- //
 builder.Services.AddScoped<IProfileService, ProfileService>();
+// -------- Product -------- //
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+// -------- Order -------- //
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 // =========================== Configuration Folder =========================== //
 

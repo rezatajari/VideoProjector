@@ -51,6 +51,5 @@ namespace VideoProjector.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
-
     }
 }
