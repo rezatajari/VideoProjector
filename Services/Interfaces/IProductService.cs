@@ -8,6 +8,5 @@ namespace VideoProjector.Services.Interfaces
         Task<ResponseCenter<List<ProductListDto>>> GetProductList();
         Task<ResponseCenter<ProductDetailDto>> GetProductDetail(GetProductDto getProduct);
         Task<ResponseCenter<List<ProductListDto>>> GetProductSearch(ProductSearchDto searchProduct);
-        Task<ResponseCenter<List<ProductListDto>>> GetProductByCategory(CategoryDto listByCategory);
     }
 }

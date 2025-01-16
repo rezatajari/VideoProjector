@@ -14,18 +14,8 @@ namespace VideoProjector.Services.Impelements
     {
         public async Task<ResponseCenter<ProfileDto>> GetCustomerProfileById(string customerId)
         {
-            Customer? customer;
-            try
-            {
-                customer = await userManager.FindByIdAsync(customerId);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("Find customer is interrupt for this ID: {ID}", customerId);
-                return ResponseCenter.CreateErrorResponse<ProfileDto>(
-                    message: "Failed find operation find customer",
-                    errorCode: "NOT_FOUND");
-            }
+
+            var customer = await userManager.FindByIdAsync(customerId);
 
             if (customer == null)
             {
@@ -48,36 +38,25 @@ namespace VideoProjector.Services.Impelements
 
         public async Task<ResponseCenter<EditDto>> GetEditProfile(string customerId)
         {
-            try
+            var customer = await userManager.FindByIdAsync(customerId);
+            if (customer == null)
             {
-                var customer = await userManager.FindByIdAsync(customerId);
-                if (customer == null)
-                {
-                    logger.LogWarning("Customer by this ID {ID} is not found", customerId);
-                    return ResponseCenter.CreateErrorResponse<EditDto>(
-                        message: "Customer is not found",
-                        errorCode: "NULL");
-                }
-
-                var editProfile = new EditDto
-                {
-                    Username = customer.UserName,
-                    Email = customer.Email!,
-                    Address = customer.Address,
-                    CurrentProfilePicturePath = customer.ProfilePicture
-                };
-
-                logger.LogInformation("Get edit profile successful for this ID: {ID}", customerId);
-                return ResponseCenter.CreateSuccessResponse(data: editProfile);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("Get edit profile page error {error}", ex.Message);
+                logger.LogWarning("Customer by this ID {ID} is not found", customerId);
                 return ResponseCenter.CreateErrorResponse<EditDto>(
-                    message: "Get edit page failed",
-                    errorCode: "FAILED_OPERATION");
+                    message: "Customer is not found",
+                    errorCode: "NULL");
             }
 
+            var editProfile = new EditDto
+            {
+                Username = customer.UserName,
+                Email = customer.Email!,
+                Address = customer.Address,
+                CurrentProfilePicturePath = customer.ProfilePicture
+            };
+
+            logger.LogInformation("Get edit profile successful for this ID: {ID}", customerId);
+            return ResponseCenter.CreateSuccessResponse(data: editProfile);
         }
 
         public async Task<ResponseCenter<IdentityResult>> EditProfile(EditDto editDto, string customerId)
@@ -99,8 +78,8 @@ namespace VideoProjector.Services.Impelements
                     errorCode: "NOT_CONFIRMED");
             }
 
-            var getProfilePicturePath = await GenerateProfilePicture(editDto.ProfilePicture,editDto.CurrentProfilePicturePath);
-   
+            var getProfilePicturePath = await GenerateProfilePicture(editDto.ProfilePicture, editDto.CurrentProfilePicturePath);
+
             customer.UserName = editDto.Username;
             customer.Email = editDto.Email;
             customer.Address = editDto.Address;
@@ -121,41 +100,31 @@ namespace VideoProjector.Services.Impelements
 
         public async Task<ResponseCenter<IdentityResult>> UpdatePassword(UpdatePasswordDto updatePassword, string customerId)
         {
-            try
+            var customer = await userManager.FindByIdAsync(customerId);
+            if (customer == null)
             {
-                var customer = await userManager.FindByIdAsync(customerId);
-                if (customer == null)
-                {
-                    logger.LogWarning("Customer is not fined by this ID: {ID}", customerId);
-                    ResponseCenter.CreateErrorResponse<IdentityResult>(
-                        message: "Customer is not found",
-                        errorCode: "NULL");
-                }
-
-                var result = await userManager.ChangePasswordAsync(customer!, updatePassword.CurrentPassword,
-                    updatePassword.NewPassword);
-
-                if (!result.Succeeded)
-                {
-                    logger.LogWarning("Password does not update for this customer ID: {ID}", customerId);
-                    return ResponseCenter.CreateErrorResponse<IdentityResult>(
-                        message: "Password does not update",
-                        errorCode: "FAILED_UPDATE");
-                }
-
-                logger.LogInformation("Password update successfully for this ID: {ID}", customerId);
-                return ResponseCenter.CreateSuccessResponse(data: result, message: "Password updated");
+                logger.LogWarning("Customer is not fined by this ID: {ID}", customerId);
+                ResponseCenter.CreateErrorResponse<IdentityResult>(
+                    message: "Customer is not found",
+                    errorCode: "NULL");
             }
-            catch (Exception ex)
+
+            var result = await userManager.ChangePasswordAsync(customer!, updatePassword.CurrentPassword,
+                updatePassword.NewPassword);
+
+            if (!result.Succeeded)
             {
-                logger.LogError("Password operation is error: {error}", ex.Message);
+                logger.LogWarning("Password does not update for this customer ID: {ID}", customerId);
                 return ResponseCenter.CreateErrorResponse<IdentityResult>(
-                    message: "Update password failed",
-                    errorCode: "UPDATE_FAILED");
+                    message: "Password does not update",
+                    errorCode: "FAILED_UPDATE");
             }
+
+            logger.LogInformation("Password update successfully for this ID: {ID}", customerId);
+            return ResponseCenter.CreateSuccessResponse(data: result, message: "Password updated");
         }
 
-        private async Task<ResponseCenter<string>> GenerateProfilePicture(IFormFile editDtoProfilePicture,string currentProfilePicture)
+        private async Task<ResponseCenter<string>> GenerateProfilePicture(IFormFile editDtoProfilePicture, string currentProfilePicture)
         {
             if (editDtoProfilePicture is not { Length: > 0 })
                 return ResponseCenter.CreateErrorResponse<string>(
@@ -178,34 +147,22 @@ namespace VideoProjector.Services.Impelements
             var fileName = Guid.NewGuid().ToString() + fileExtension;
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "uploads", fileName);
 
-            try
-            {
-                // Save the file to disk
-                await using var fileStream = new FileStream(filePath, FileMode.Create);
-                await editDtoProfilePicture.CopyToAsync(fileStream);
-                logger.LogInformation("Save picture is successful");
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("In save picture profile is error {ex}", ex);
-                return ResponseCenter.CreateErrorResponse<string>(
-                    message: "Save operation image failed",
-                    errorCode: "NOT_SAVE");
-            }
+            // Save the file to disk
+            await using var fileStream = new FileStream(filePath, FileMode.Create);
+            await editDtoProfilePicture.CopyToAsync(fileStream);
+            logger.LogInformation("Save picture is successful");
 
             var fileUrl = $"/uploads/{fileName}";
 
-            if (!string.IsNullOrEmpty(currentProfilePicture))
+            if (string.IsNullOrEmpty(currentProfilePicture)) return ResponseCenter.CreateSuccessResponse(data: fileUrl);
+
+            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), currentProfilePicture.TrimStart('/'));
+            if (File.Exists(oldFilePath))
             {
-                var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), currentProfilePicture.TrimStart('/'));
-                if (File.Exists(oldFilePath))
-                {
-                    File.Delete(oldFilePath);
-                }
+                File.Delete(oldFilePath);
             }
 
             return ResponseCenter.CreateSuccessResponse(data: fileUrl);
-
         }
     }
 }

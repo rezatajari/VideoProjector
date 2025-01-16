@@ -18,23 +18,16 @@ namespace VideoProjector.Controllers
         [HttpGet(template: "details")]
         public async Task<IActionResult> GetCustomerProfile()
         {
-            try
-            {
-                // Extract customer ID from claims
-                var customerId = User.FindFirst(type: ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(customerId))
-                    return Unauthorized("Invalid token: Customer ID missing");
+            // Extract customer ID from claims
+            var customerId = User.FindFirst(type: ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(customerId))
+                return Unauthorized("Invalid token: Customer ID missing");
 
-                var result = await profileService.GetCustomerProfileById(customerId);
+            var result = await profileService.GetCustomerProfileById(customerId);
 
-                if (result.Status == "Error")
-                    return BadRequest(result);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(error: "An error occurred while processing your request.");
-            }
+            if (result.Status == "Error")
+                return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpGet(template: "edit")]
@@ -46,7 +39,6 @@ namespace VideoProjector.Controllers
             if (result.Status == "Error")
                 return BadRequest(result);
             return Ok(result);
-
         }
 
         [HttpPatch(template: "edit")]

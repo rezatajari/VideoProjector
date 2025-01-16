@@ -1,4 +1,6 @@
-﻿namespace VideoProjector.Middleware
+﻿using VideoProjector.Common;
+
+namespace VideoProjector.Middleware
 {
     using Microsoft.AspNetCore.Http;
     using Serilog;
@@ -27,12 +29,10 @@
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            var response = new
-            {
-                StatusCode = context.Response.StatusCode,
-                Message = "An internal server error occurred. Please try again later.",
-                Detailed = exception.Message // Optionally include detailed error message
-            };
+            var response = ResponseCenter.CreateErrorResponse<object>(
+                message: "An internal server error occurred. Please try again later.",
+                errorCode: "INTERNAL_SERVER_ERROR"
+            );
 
             return context.Response.WriteAsJsonAsync(response);
         }
