@@ -9,11 +9,9 @@ namespace VideoProjector.Data.Repositories.Implementations
     {
         public async Task<List<Product>> GetAllProducts()
         {
-            var products = await database.Products
+            return await database.Products
                 .Include(c => c.Category)
                 .ToListAsync();
-
-            return products;
         }
 
         public async Task<Product> GetProductById(int productId)

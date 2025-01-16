@@ -28,8 +28,12 @@ VideoProjector is a web application for managing video projector products, order
     dotnet run
     ```
 
-## Database Information
-For detailed information about the database schema and entities, please refer to the Database Documentation in the `docs` folder.
+## Documentation
+For detailed information about the project, please refer to the documentation in the docs folder:
+
+- DTOs Documentation
+- Profile Documentation
+- Order Documentation
 
 ## Contributing
 Fork the repository and submit a pull request.

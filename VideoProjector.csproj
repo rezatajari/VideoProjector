@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Common\" />
+    <Folder Include="docs\DTO%27s\Profile\" />
     <Folder Include="Tests\IntegrationTests\" />
     <Folder Include="Tests\UnitTests\" />
   </ItemGroup>
