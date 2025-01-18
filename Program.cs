@@ -66,3 +66,4 @@ app.MapControllers();
 
 app.Run();
 
+// set validation for all of model dto
