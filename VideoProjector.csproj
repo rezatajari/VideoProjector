@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="docs\DTO%27s\Profile\**" />
+    <Content Remove="docs\DTO%27s\Profile\**" />
+    <EmbeddedResource Remove="docs\DTO%27s\Profile\**" />
+    <None Remove="docs\DTO%27s\Profile\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
@@ -25,7 +32,6 @@
 
   <ItemGroup>
     <Folder Include="Common\" />
-    <Folder Include="docs\DTO%27s\Profile\" />
     <Folder Include="Tests\IntegrationTests\" />
     <Folder Include="Tests\UnitTests\" />
   </ItemGroup>

@@ -1,4 +1,6 @@
-﻿namespace VideoProjector.DTOs.Order
+﻿using VideoProjector.DTOs.OrderDetail;
+
+namespace VideoProjector.DTOs.Order
 {
     public class OrderGetDto
     {

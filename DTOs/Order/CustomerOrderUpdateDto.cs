@@ -3,7 +3,7 @@
     public class CustomerOrderUpdateDto
     {
         public int OrderId { get; set; }
-        public string ShippingAddress { get; set; }
+        public required string ShippingAddress { get; set; }
     }
 
 }

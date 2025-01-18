@@ -9,10 +9,10 @@
         public decimal Price { get; set; }  // Price at the time of order
 
         // Navigation property to Order
-        public virtual Order? Order { get; set; }
+        public virtual Order Order { get; set; }
 
         // Navigation property to Product
-        public virtual Product? Product { get; set; }
+        public virtual Product Product { get; set; }
     }
 
 }

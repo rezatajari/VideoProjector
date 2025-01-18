@@ -7,6 +7,13 @@ namespace VideoProjector.Data.Repositories.Implementations
 {
     public class OrderRepository(VpDatabase database) : IOrderRepository
     {
+        public async Task<Order?> GetOrder(int orderId)
+        {
+            return await database.Orders.Include(d => d.OrderDetails)
+                .Where(o => o.OrderId == orderId)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<List<Order>> ListOrder(string customerId)
         {
             return await database.Orders
@@ -33,10 +40,14 @@ namespace VideoProjector.Data.Repositories.Implementations
             await database.SaveChangesAsync();
         }
 
-        public async Task<Order> GetOrder(int orderId)
+        public async Task<List<OrderDetail>> GetOrderDetails(int orderId)
         {
-            return await database.Orders
-                       .FirstOrDefaultAsync(c => c.OrderId == orderId);
+            return await database.OrderDetails
+                .Include(p => p.Product)
+                .Include(o => o.OrderId)
+                .Where(c => c.OrderId == orderId)
+                .ToListAsync();
+
         }
     }
 }
