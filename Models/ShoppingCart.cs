@@ -9,7 +9,6 @@
         // Navigation Property
         public Customer? Customer { get; set; } // Navigation property for the Customer.
         public virtual ICollection<ShoppingCartItem>? Items { get; set; } // List of items in the cart
-
     }
 
 }
