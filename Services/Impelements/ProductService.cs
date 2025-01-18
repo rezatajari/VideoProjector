@@ -6,7 +6,7 @@ using VideoProjector.Services.Interfaces;
 
 namespace VideoProjector.Services.Impelements
 {
-    public class ProductService(IProductRepository repo, Logger<ProductService> logger) : IProductService
+    public class ProductService(IProductRepository repo, ILogger<ProductService> logger) : IProductService
     {
         public async Task<ResponseCenter<List<ProductListDto>>> GetProductList()
         {

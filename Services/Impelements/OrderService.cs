@@ -7,7 +7,7 @@ using VideoProjector.Services.Interfaces;
 
 namespace VideoProjector.Services.Impelements
 {
-    public class OrderService(IOrderRepository repo, Logger<OrderService> logger) : IOrderService
+    public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) : IOrderService
     {
         public async Task<ResponseCenter<List<OrderListDto>>> GetOrders(string customerId)
         {

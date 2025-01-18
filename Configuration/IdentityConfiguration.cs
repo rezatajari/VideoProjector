@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using VideoProjector.Data;
+using VideoProjector.Models;
 
 namespace VideoProjector.Configuration
 {
@@ -7,7 +8,7 @@ namespace VideoProjector.Configuration
     {
         public static void ConfigureIdentity(this IServiceCollection services)
         {
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<Customer, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
             })

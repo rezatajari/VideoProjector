@@ -15,6 +15,8 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddLogging();
+
 // =========================== Configuration Folder =========================== //
 
 // --------------------------- Database configure services --------------------------- //
@@ -23,9 +25,12 @@ builder.Services.ConfigureDbContext(builder.Configuration);
 builder.Services.ConfigureIdentity();
 // --------------------------- Jwt configure --------------------------- //
 builder.Services.ConfigureJwtAuthentication(builder.Configuration);
+builder.Services.AddScoped<JwtTokenService>();
 // --------------------------- Logger configure --------------------------- //
 LoggerConfig.ConfigureLogger(builder.Configuration);
 builder.Host.UseSerilog(); // Replace default .NET logger with Serilog
+// --------------------------- Email configure --------------------------- //
+builder.Services.ConfigureEmail();
 
 // =========================== Configuration Folder =========================== //
 
