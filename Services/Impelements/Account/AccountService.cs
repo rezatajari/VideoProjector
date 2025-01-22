@@ -1,12 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
 using System.Net;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
-using Azure.Identity;
 using VideoProjector.Common;
 using VideoProjector.Models;
 using VideoProjector.Services.Interfaces;
