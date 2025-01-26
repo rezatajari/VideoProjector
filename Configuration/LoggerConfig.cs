@@ -18,9 +18,6 @@ namespace VideoProjector.Configuration
 
             // Configure Serilog
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration) // Read settings from appsettings.json
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
                 .WriteTo.MSSqlServer(
                     connectionString,
                     sinkOptions: new MSSqlServerSinkOptions
@@ -30,6 +27,8 @@ namespace VideoProjector.Configuration
                     },
                     restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information // Minimum log level
                 )
+                .Filter.ByExcluding(logEvent=>logEvent.Properties.ContainsKey("SourceContext")&&
+                                              logEvent.Properties["SourceContext"].ToString().Contains("Microsoft"))
                 .CreateLogger();
         }
     }

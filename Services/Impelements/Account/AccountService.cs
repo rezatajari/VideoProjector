@@ -51,6 +51,11 @@ namespace VideoProjector.Services.Impelements.Account
             }
         }
 
+        /// <summary>
+        /// Registers a new customer with the provided registration details.
+        /// </summary>
+        /// <param name="registerDto">The registration details of the new customer.</param>
+        /// <returns>A response indicating the success or failure of the registration process.</returns>
         public async Task<ResponseCenter<string>> Register(RegisterDto registerDto)
         {
             try
@@ -68,13 +73,10 @@ namespace VideoProjector.Services.Impelements.Account
                 // Create the user
                 var resultRegistration = await userManager.CreateAsync(newCustomer, registerDto.Password);
 
-                // Check if the user creation was successful
                 if (!resultRegistration.Succeeded)
                 {
-                    // Log a warning for a failed registration attempt
                     logger.LogWarning("Failed to create a new customer: {Email}", registerDto.Email);
 
-                    // Return an error response for failed registration
                     return ResponseCenter.CreateErrorResponse<string>(
                         message: "Failed to create a new customer.",
                         errorCode: "CREATE_CUSTOMER_ERROR",
@@ -113,10 +115,11 @@ namespace VideoProjector.Services.Impelements.Account
             {
                 // Generate the token for email confirmation
                 var token = await userManager.GenerateEmailConfirmationTokenAsync(customer);
+                var encodedToken = WebUtility.UrlEncode(token);
 
                 // Construct the confirmation link
-                var frontendUrl = "http://localhost:5098";
-                var confirmationLink = $"{frontendUrl}/confirm-email?customerId={customer.Id}&token={WebUtility.UrlEncode(token)}";
+                const string frontendUrl = "http://localhost:61028";
+                var confirmationLink = $"{frontendUrl}/confirm-email?customerId={customer.Id}&token={encodedToken}";
 
                 await emailConfirmationService.SendConfirmationEmailAsync(customer.Email, "Confirm your email", $"Please confirm your email by clicking <a href='{confirmationLink}'>here</a>.");
 
@@ -131,11 +134,16 @@ namespace VideoProjector.Services.Impelements.Account
             }
         }
 
+        /// <summary>
+        /// Confirmation email 
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public async Task<ResponseCenter<string>> ConfirmEmail(string customerId, string token)
         {
             try
             {
-                // Find customer
                 var customer = await userManager.FindByIdAsync(customerId);
                 if (customer == null)
                     return ResponseCenter.CreateErrorResponse<string>(
@@ -143,7 +151,8 @@ namespace VideoProjector.Services.Impelements.Account
                         errorCode: "NOT_FOUND");
 
                 // Confirmation email
-                var result = await userManager.ConfirmEmailAsync(customer, token);
+                var decodedToken = WebUtility.UrlDecode(token);
+                var result = await userManager.ConfirmEmailAsync(customer, decodedToken);
                 if (!result.Succeeded)
                     return ResponseCenter.CreateErrorResponse<string>(
                         message: "Failed to confirm email",

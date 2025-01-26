@@ -14,6 +14,7 @@ namespace VideoProjector.DTOs.Account
 
         [Required(ErrorMessage = "Password is required.")]
         [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
+        [RegularExpression(pattern: "^(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$")]
         public required string Password { get; set; }
 
         [Required(ErrorMessage = "Confirm Password is required.")]
