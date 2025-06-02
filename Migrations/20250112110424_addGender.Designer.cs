@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VideoProjector.Data;
 
@@ -11,9 +12,11 @@ using VideoProjector.Data;
 namespace VideoProjector.Migrations
 {
     [DbContext(typeof(VpDatabase))]
-    partial class VpDatabaseModelSnapshot : ModelSnapshot
+    [Migration("20250112110424_addGender")]
+    partial class addGender
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
