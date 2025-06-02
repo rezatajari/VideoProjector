@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VideoProjector.Common;
 using VideoProjector.DTOs.Product;
@@ -7,11 +8,19 @@ using VideoProjector.Services.Interfaces;
 
 namespace VideoProjector.Controllers
 {
+    /// <summary>
+    /// Products http handler
+    /// </summary>
+    /// <param name="productService"></param>
     [Route(template: "api/product")]
     [ApiController]
     public class ProductController(IProductService productService) : ControllerBase
     {
-        [HttpGet(template: "product-list")]
+        /// <summary>
+        /// list of product
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(template: "list")]
         public async Task<IActionResult> GetProducts()
         {
             var result = await productService.GetProductList();

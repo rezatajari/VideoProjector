@@ -5,8 +5,18 @@ using System.Text;
 
 namespace VideoProjector.Services.Impelements.Account
 {
+    /// <summary>
+    /// JWT token generator
+    /// </summary>
+    /// <param name="configuration"></param>
     public class JwtTokenService(IConfiguration configuration)
     {
+        /// <summary>
+        /// Token generator
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public string GenerateToken(string customerId, string email)
         {
             var jwtSettings = configuration.GetSection("JwtSettings");

@@ -7,6 +7,10 @@ using VideoProjector.Services.Interfaces;
 
 namespace VideoProjector.Controllers
 {
+    /// <summary>
+    /// Account http handler 
+    /// </summary>
+    /// <param name="accountService"></param>
     [Route(template: "api/account")]
     [ApiController]
     public class AccountController(IAccountService accountService) : ControllerBase
@@ -69,22 +73,16 @@ namespace VideoProjector.Controllers
         [HttpPost(template: "confirm-email")]
         public async Task<IActionResult> ConfirmEmail(string customerId, string token)
         {
-            // Validate the input parameters
             if (string.IsNullOrEmpty(customerId) || string.IsNullOrEmpty(token))
-                // Return a bad request response with an error message
                 return BadRequest(ResponseCenter.CreateErrorResponse<string>(
                     message: "Invalid email confirmation request.",
                     errorCode: "NULL_OR_EMPTY"));
 
-            // Call the confirm email method in the AccountService
             var result = await accountService.ConfirmEmail(customerId, token);
 
-            // Check if the email confirmation was unsuccessful
             if (result.Status == "Error")
-                // Return a bad request response with the error details
                 return BadRequest(result);
 
-            // Return an OK response with the success details
             return Ok(result);
         }
     }

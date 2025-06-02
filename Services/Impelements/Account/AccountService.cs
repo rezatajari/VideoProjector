@@ -7,15 +7,26 @@ using VideoProjector.DTOs.Account;
 
 namespace VideoProjector.Services.Impelements.Account
 {
+    /// <summary>
+    /// Service of account customers
+    /// </summary>
+    /// <param name="userManager"></param>
+    /// <param name="logger"></param>
+    /// <param name="emailConfirmationService"></param>
+    /// <param name="jwtToken"></param>
     public class AccountService(UserManager<Customer> userManager, ILogger<AccountService> logger,
                    EmailConfirmationService emailConfirmationService, JwtTokenService jwtToken) : IAccountService
     {
 
+        /// <summary>
+        /// Login service layer
+        /// </summary>
+        /// <param name="loginDto"></param>
+        /// <returns></returns>
         public async Task<ResponseCenter<string>> Login(LoginDto loginDto)
         {
             try
             {
-                // Find the customer by email
                 var customer = await userManager.FindByEmailAsync(loginDto.Email);
 
                 // Check if the customer exists and the password is correct

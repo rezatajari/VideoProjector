@@ -6,8 +6,19 @@ using System.Threading.Tasks;
 
 namespace VideoProjector.Services.Impelements.Account
 {
+    /// <summary>
+    /// Email service for confirmation it
+    /// </summary>
+    /// <param name="configuration"></param>
+    /// <param name="logger"></param>
     public class EmailConfirmationService(IConfiguration configuration, ILogger<EmailConfirmationService> logger)
     {
+        /// <summary>
+        /// Send email service
+        /// </summary>
+        /// <param name="toEmail"></param>
+        /// <param name="subject"></param>
+        /// <param name="message"></param>
         public async Task SendConfirmationEmailAsync(string toEmail, string subject, string message)
         {
             var smtpSettings = configuration.GetSection("SmtpSettings");
