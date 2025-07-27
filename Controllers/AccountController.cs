@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using VideoProjector.Common;
 using VideoProjector.DTOs.Account;
-using VideoProjector.Services.Impelements.Account;
 using VideoProjector.Services.Interfaces;
 
 namespace VideoProjector.Controllers
