@@ -1,0 +1,52 @@
+﻿@page "/"
+@layout MainLayout
+
+<div class="container mt-5 text-center">
+    <h1 class="display-4 mb-3">Welcome to Video Projector Inventory</h1>
+    <p class="lead">Manage, track, and explore your projector devices easily.</p>
+</div>
+
+<hr class="my-5" />
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">🎥 Projectors</h5>
+                    <p class="card-text">Browse and manage all projector entries.</p>
+                    <NavLink href="/projectors" class="btn btn-primary">Go</NavLink>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">🏷️ Brands</h5>
+                    <p class="card-text">View all supported projector brands.</p>
+                    <NavLink href="/brands" class="btn btn-primary">Go</NavLink>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">📂 Categories</h5>
+                    <p class="card-text">Explore our range of product categories.</p>
+                    <NavLink href="/Categories/Index" class="btn btn-primary">Categories</NavLink>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5" />
+
+<div class="container text-center">
+    <h4>🔐 User Access</h4>
+    <p>If you have an account, log in. Otherwise, register to manage your projector assets.</p>
+    <NavLink class="btn btn-outline-primary me-2" href="/Account/login">Login</NavLink>
+    <NavLink class="btn btn-outline-success" href="/Account/Register">Register</NavLink>
+</div>

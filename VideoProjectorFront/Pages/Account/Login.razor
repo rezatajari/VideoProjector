@@ -1,0 +1,29 @@
+﻿@page "/Account/Login"
+@layout MainLayout
+@using VideoProjectorFront.DTOs.Account
+
+
+<EditForm Model="_loginModel">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Login</h2>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <InputText id="email" class="form-control" @bind-Value="_loginModel.Email"/>
+            <ValidationMessage For="@(() => _loginModel.Email)"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <InputText id="password" type="password" class="form-control" @bind-Value="_loginModel.Password"/>
+            <ValidationMessage For="@(() => _loginModel.Password)"/>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+        <NavLink href="/Account/Register" class="btn btn-dark">Register</NavLink>
+        <NavLink href="/" class="btn btn-light">Home</NavLink>
+    </div>
+</EditForm>

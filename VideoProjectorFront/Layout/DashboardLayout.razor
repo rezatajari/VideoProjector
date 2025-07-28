@@ -1,0 +1,27 @@
+﻿@inherits LayoutComponentBase
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <nav class="bg-dark text-white p-3" style="min-width: 200px; height: 100vh;">
+        <h5>Dashboard</h5>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <NavLink class="nav-link text-white" href="/dashboard" Match="NavLinkMatch.All">Home</NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link text-white" href="/profile">Profile</NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link text-white" href="/projectors">Projectors</NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link text-white" href="/logout">Logout</NavLink>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="flex-grow-1 p-4">
+        @Body
+    </div>
+</div>

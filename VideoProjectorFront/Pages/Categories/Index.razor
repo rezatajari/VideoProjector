@@ -1,0 +1,22 @@
+﻿@page "/Categories/Index"
+
+
+<h2>Product Categories</h2>
+
+<div class="row">
+    @foreach (var category in _categories)
+    {
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+            <NavLink class="card text-decoration-none text-dark" href="@($"/Categories/Details/{category.CategoryId}")">
+                <img class="card-img-top img-fluid" src="@category.ImageUrl" alt="@category.Name" />
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @category.Name
+                        <span class="badge bg-primary">@category.ProductCount</span>
+                    </h5>
+                    <p class="card-text">@category.Description</p>
+                </div>
+            </NavLink>
+        </div>
+    }
+</div>
