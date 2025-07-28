@@ -5,7 +5,7 @@ namespace VideoProjector.Common
     /// </summary>
     /// <typeparam name="T">The type of the data being returned in the response.</typeparam>
     public class ResponseCenter<T>
-    {
+    {//TODO: change structure of responce cfenter becuase need to issuccess
         /// <summary>
         /// Gets or sets the status of the response (e.g., "Success", "Error").
         /// </summary>
