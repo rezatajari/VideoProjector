@@ -5,7 +5,6 @@ namespace VideoProjector.Services.Interfaces
 {
     public interface ICategoryService
     {
-        Task<ResponseCenter<List<CategoryDto>> Categories();
-
+        Task<GeneralResponse<List<CategoryDto>>> Categories();
     }
 }

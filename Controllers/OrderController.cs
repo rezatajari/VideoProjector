@@ -18,15 +18,10 @@ namespace VideoProjector.Controllers
         public async Task<IActionResult> GetOrder(int orderId)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ResponseCenter.CreateErrorResponse<int>(
-                    message: "Validation is error",
-                    errorCode: "VALIDATION_ERROR",
-                    validationErrors: ModelState.Values.SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)
-                        .ToList()));
+                return BadRequest(GeneralResponse<int>.Failure(message: "Validation is error"));
 
             var result = await orderService.GetOrder(orderId);
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }
@@ -35,14 +30,10 @@ namespace VideoProjector.Controllers
         public async Task<IActionResult> GetOrders(string customerId)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ResponseCenter.CreateErrorResponse<string>(
-                    message: "Validation is error",
-                    errorCode: "VALIDATION_ERROR",
-                    validationErrors: ModelState.Values.SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)
-                        .ToList()));
+                return BadRequest(GeneralResponse<string>.Failure(message: "Validation is error"));
+
             var result = await orderService.GetOrders(customerId);
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }
@@ -51,15 +42,10 @@ namespace VideoProjector.Controllers
         public async Task<IActionResult> AddOrder([FromBody] OrderAddDto orderAdd)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ResponseCenter.CreateErrorResponse<OrderAddDto>(
-                    message: "Validation is error",
-                    errorCode: "VALIDATION_ERROR",
-                    validationErrors: ModelState.Values.SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)
-                        .ToList()));
+                return BadRequest(GeneralResponse<OrderAddDto>.Failure(message: "Validation is error"));
 
             var result = await orderService.AddOrder(orderAdd);
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }
@@ -68,15 +54,10 @@ namespace VideoProjector.Controllers
         public async Task<IActionResult> GetOrdersDetail(int orderId)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ResponseCenter.CreateErrorResponse<int>(
-                    message: "Validation is error",
-                    errorCode: "VALIDATION_ERROR",
-                    validationErrors: ModelState.Values.SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)
-                        .ToList()));
+                return BadRequest(GeneralResponse<int>.Failure(message: "Validation is error"));
 
             var result = await orderService.GetOrdersDetail(orderId);
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }
@@ -85,15 +66,10 @@ namespace VideoProjector.Controllers
         public async Task<IActionResult> UpdateOrder([FromBody] CustomerOrderUpdateDto orderUpdate)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ResponseCenter.CreateErrorResponse<CustomerOrderUpdateDto>(
-                    message: "Validation is error",
-                    errorCode: "VALIDATION_ERROR",
-                    validationErrors: ModelState.Values.SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)
-                        .ToList()));
-
+                return BadRequest(GeneralResponse<CustomerOrderUpdateDto>.Failure(message: "Validation is error"));
+                    
             var result = await orderService.UpdateOrderByCustomer(orderUpdate);
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }
@@ -102,15 +78,10 @@ namespace VideoProjector.Controllers
         public async Task<IActionResult> DeleteOrder(int orderId)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ResponseCenter.CreateErrorResponse<int>(
-                    message: "Validation is error",
-                    errorCode: "VALIDATION_ERROR",
-                    validationErrors: ModelState.Values.SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)
-                        .ToList()));
+                return BadRequest(GeneralResponse<int>.Failure(message: "Validation is error"));
 
             var result = await orderService.DeleteOrder(orderId);
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }

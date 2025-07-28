@@ -23,7 +23,7 @@ namespace VideoProjector.Services.Impelements.Account
         /// </summary>
         /// <param name="loginDto"></param>
         /// <returns></returns>
-        public async Task<ResponseCenter<string>> Login(LoginDto loginDto)
+        public async Task<GeneralResponse<string>> Login(LoginDto loginDto)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace VideoProjector.Services.Impelements.Account
         /// </summary>
         /// <param name="registerDto">The registration details of the new customer.</param>
         /// <returns>A response indicating the success or failure of the registration process.</returns>
-        public async Task<ResponseCenter<string>> Register(RegisterDto registerDto)
+        public async Task<GeneralResponse<string>> Register(RegisterDto registerDto)
         {
             try
             {
@@ -120,7 +120,7 @@ namespace VideoProjector.Services.Impelements.Account
         }
 
 
-        private async Task<ResponseCenter<string>> SendEmailConfirmation(Customer customer)
+        private async Task<GeneralResponse<string>> SendEmailConfirmation(Customer customer)
         {
             try
             {
@@ -151,7 +151,7 @@ namespace VideoProjector.Services.Impelements.Account
         /// <param name="customerId"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<ResponseCenter<string>> ConfirmEmail(string customerId, string token)
+        public async Task<GeneralResponse<string>> ConfirmEmail(string customerId, string token)
         {
             try
             {

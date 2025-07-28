@@ -15,7 +15,7 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
     /// </summary>
     /// <param name="customerId">The customer identifier.</param>
     /// <returns>A response containing a list of order DTOs.</returns>
-    public async Task<ResponseCenter<List<OrderListDto>>> GetOrders(string customerId)
+    public async Task<GeneralResponse<List<OrderListDto>>> GetOrders(string customerId)
     {
         var orders = await repo.ListOrder(customerId);
         if (orders.Count == 0)
@@ -39,7 +39,7 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
     /// </summary>
     /// <param name="orderId">The order identifier.</param>
     /// <returns>A response containing a list of order detail DTOs.</returns>
-    public async Task<ResponseCenter<List<OrderDetailDto>>> GetOrdersDetail(int orderId)
+    public async Task<GeneralResponse<List<OrderDetailDto>>> GetOrdersDetail(int orderId)
     {
         var orderDetails = await repo.GetOrderDetails(orderId);
         if (orderDetails == null || orderDetails.Count == 0)
@@ -65,7 +65,7 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
     /// </summary>
     /// <param name="orderId">The order identifier.</param>
     /// <returns>A response containing the order DTO.</returns>
-    public async Task<ResponseCenter<OrderGetDto>> GetOrder(int orderId)
+    public async Task<GeneralResponse<OrderGetDto>> GetOrder(int orderId)
     {
         var order = await repo.GetOrder(orderId);
         if (order == null)
@@ -101,7 +101,7 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
     /// </summary>
     /// <param name="orderUpdate">The order update DTO.</param>
     /// <returns>A response indicating whether the update was successful.</returns>
-    public async Task<ResponseCenter<bool>> UpdateOrderByCustomer(CustomerOrderUpdateDto orderUpdate)
+    public async Task<GeneralResponse<bool>> UpdateOrderByCustomer(CustomerOrderUpdateDto orderUpdate)
     {
         if (orderUpdate == null)
             return ResponseCenter.CreateErrorResponse<bool>(
@@ -131,7 +131,7 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
     /// </summary>
     /// <param name="orderAdd">The order add DTO.</param>
     /// <returns>A response indicating whether the addition was successful.</returns>
-    public async Task<ResponseCenter<bool>> AddOrder(OrderAddDto orderAdd)
+    public async Task<GeneralResponse<bool>> AddOrder(OrderAddDto orderAdd)
     {
         var order = new Order
         {
@@ -159,7 +159,7 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
     /// </summary>
     /// <param name="orderId">The order identifier.</param>
     /// <returns>A response indicating whether the deletion was successful.</returns>
-    public async Task<ResponseCenter<bool>> DeleteOrder(int orderId)
+    public async Task<GeneralResponse<bool>> DeleteOrder(int orderId)
     {
         var order = await repo.GetOrder(orderId);
         if (order == null)

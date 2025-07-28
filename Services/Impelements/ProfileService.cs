@@ -12,7 +12,7 @@ namespace VideoProjector.Services.Impelements
 {
     public class ProfileService(UserManager<Customer> userManager, ILogger<ProfileService> logger) : IProfileService
     {
-        public async Task<ResponseCenter<ProfileDto>> GetCustomerProfileById(string customerId)
+        public async Task<GeneralResponse<ProfileDto>> GetCustomerProfileById(string customerId)
         {
 
             var customer = await userManager.FindByIdAsync(customerId);
@@ -36,7 +36,7 @@ namespace VideoProjector.Services.Impelements
 
         }
 
-        public async Task<ResponseCenter<EditDto>> GetEditProfile(string customerId)
+        public async Task<GeneralResponse<EditDto>> GetEditProfile(string customerId)
         {
             var customer = await userManager.FindByIdAsync(customerId);
             if (customer == null)
@@ -59,7 +59,7 @@ namespace VideoProjector.Services.Impelements
             return ResponseCenter.CreateSuccessResponse(data: editProfile);
         }
 
-        public async Task<ResponseCenter<IdentityResult>> EditProfile(EditDto editDto, string customerId)
+        public async Task<GeneralResponse<IdentityResult>> EditProfile(EditDto editDto, string customerId)
         {
             var customer = await userManager.FindByIdAsync(customerId);
             if (customer == null)
@@ -98,7 +98,7 @@ namespace VideoProjector.Services.Impelements
             return ResponseCenter.CreateSuccessResponse(data: result, message: "Update successful");
         }
 
-        public async Task<ResponseCenter<IdentityResult>> UpdatePassword(UpdatePasswordDto updatePassword, string customerId)
+        public async Task<GeneralResponse<IdentityResult>> UpdatePassword(UpdatePasswordDto updatePassword, string customerId)
         {
             var customer = await userManager.FindByIdAsync(customerId);
             if (customer == null)
@@ -124,7 +124,7 @@ namespace VideoProjector.Services.Impelements
             return ResponseCenter.CreateSuccessResponse(data: result, message: "Password updated");
         }
 
-        private async Task<ResponseCenter<string>> GenerateProfilePicture(IFormFile editDtoProfilePicture, string currentProfilePicture)
+        private async Task<GeneralResponse<string>> GenerateProfilePicture(IFormFile editDtoProfilePicture, string currentProfilePicture)
         {
             if (editDtoProfilePicture is not { Length: > 0 })
                 return ResponseCenter.CreateErrorResponse<string>(

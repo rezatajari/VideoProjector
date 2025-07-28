@@ -8,7 +8,7 @@ namespace VideoProjector.Services.Impelements
 {
     public class ShoppingCartService(IShoppingCartRepository repo, ILogger<ShoppingCartService> logger) : IShoppingCartService
     {
-        public async Task<ResponseCenter<bool>> AddCart(ShoppingCartDto cartDto)
+        public async Task<GeneralResponse<bool>> AddCart(ShoppingCartDto cartDto)
         {
 
             // Check duplicate cart
@@ -45,7 +45,7 @@ namespace VideoProjector.Services.Impelements
         }
 
 
-        public async Task<ResponseCenter<bool>> AddItemToCart(ShoppingCartItemDto itemDto)
+        public async Task<GeneralResponse<bool>> AddItemToCart(ShoppingCartItemDto itemDto)
         {
             var item = new ShoppingCartItem
             {
@@ -61,7 +61,7 @@ namespace VideoProjector.Services.Impelements
             return ResponseCenter.CreateSuccessResponse(data: true);
         }
 
-        public async Task<ResponseCenter<List<ShoppingCartItemDto>>> GetShoppingCartItems(int shoppingCartId)
+        public async Task<GeneralResponse<List<ShoppingCartItemDto>>> GetShoppingCartItems(int shoppingCartId)
         {
             var cartItems = await repo.GetShoppingCartItems(shoppingCartId);
             var cartItemsDto = cartItems.Select(it => new ShoppingCartItemDto
@@ -74,7 +74,7 @@ namespace VideoProjector.Services.Impelements
             return ResponseCenter.CreateSuccessResponse(data: cartItemsDto);
         }
 
-        public async Task<ResponseCenter<bool>> UpdateCartItem(List<ShoppingCartItemDto> itemDto, int shoppingCartId)
+        public async Task<GeneralResponse<bool>> UpdateCartItem(List<ShoppingCartItemDto> itemDto, int shoppingCartId)
         {
             // Get items from database
             var cartItems = await repo.GetShoppingCartItems(shoppingCartId);
@@ -98,7 +98,7 @@ namespace VideoProjector.Services.Impelements
             return ResponseCenter.CreateSuccessResponse(data: true);
         }
 
-        public async Task<ResponseCenter<bool>> RemoveCartItem(int shoppingCartItemId)
+        public async Task<GeneralResponse<bool>> RemoveCartItem(int shoppingCartItemId)
         {
             var result = await repo.DeleteShoppingCartItem(shoppingCartItemId);
             if (!result)
@@ -108,7 +108,7 @@ namespace VideoProjector.Services.Impelements
             return ResponseCenter.CreateSuccessResponse(data: true);
         }
 
-        public async Task<ResponseCenter<bool>> ValidateCart(int shoppingCartId)
+        public async Task<GeneralResponse<bool>> ValidateCart(int shoppingCartId)
         {
             var result = await repo.IsCartProcessable(shoppingCartId);
             if (!result)
@@ -118,7 +118,7 @@ namespace VideoProjector.Services.Impelements
             return ResponseCenter.CreateSuccessResponse(data: true);
         }
 
-        public ResponseCenter<decimal> GetTotalPriceItems(List<ShoppingCartItemDto> cartItemsDto)
+        public GeneralResponse<decimal> GetTotalPriceItems(List<ShoppingCartItemDto> cartItemsDto)
         {
             var totalPrice = cartItemsDto.Sum(item => item.TotalPrice);
             return ResponseCenter.CreateSuccessResponse(data: totalPrice);

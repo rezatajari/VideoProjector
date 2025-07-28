@@ -7,12 +7,12 @@ namespace VideoProjector.Services.Interfaces
 {
     public interface IOrderService
     {
-        Task<ResponseCenter<OrderGetDto>> GetOrder(int orderId);
-        Task<ResponseCenter<List<OrderListDto>>> GetOrders(string customerId);
-        Task<ResponseCenter<List<OrderDetailDto>>> GetOrdersDetail(int orderId);
-        Task<ResponseCenter<bool>> UpdateOrderByCustomer(CustomerOrderUpdateDto orderUpdate);
-        Task<ResponseCenter<bool>> AddOrder(OrderAddDto orderAdd);
-        Task<ResponseCenter<bool>> DeleteOrder(int orderId);
+        Task<GeneralResponse<OrderGetDto>> GetOrder(int orderId);
+        Task<GeneralResponse<List<OrderListDto>>> GetOrders(string customerId);
+        Task<GeneralResponse<List<OrderDetailDto>>> GetOrdersDetail(int orderId);
+        Task<GeneralResponse<bool>> UpdateOrderByCustomer(CustomerOrderUpdateDto orderUpdate);
+        Task<GeneralResponse<bool>> AddOrder(OrderAddDto orderAdd);
+        Task<GeneralResponse<bool>> DeleteOrder(int orderId);
     }
 }
 

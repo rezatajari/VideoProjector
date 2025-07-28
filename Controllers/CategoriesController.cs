@@ -13,6 +13,10 @@ namespace VideoProjector.Controllers
         {
             var result = await _categoryService.Categories();
 
+            if (!result.IsSuccess)
+                return BadRequest(result);
+
+            return Ok(result.Data);
         }
     }
 }

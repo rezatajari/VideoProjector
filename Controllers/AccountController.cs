@@ -30,7 +30,7 @@ namespace VideoProjector.Controllers
         {
             var result = await accountService.Login(loginDto);
 
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
 
             return Ok(result);
@@ -51,7 +51,7 @@ namespace VideoProjector.Controllers
         {
             var result = await accountService.Register(registerDto);
 
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
 
             return Ok(result);
@@ -72,13 +72,12 @@ namespace VideoProjector.Controllers
         public async Task<IActionResult> ConfirmEmail(string customerId, string token)
         {
             if (string.IsNullOrEmpty(customerId) || string.IsNullOrEmpty(token))
-                return BadRequest(ResponseCenter.CreateErrorResponse<string>(
-                    message: "Invalid email confirmation request.",
-                    errorCode: "NULL_OR_EMPTY"));
+                return BadRequest(GeneralResponse<string>.Failure(
+                    message: "Invalid email confirmation request."));
 
             var result = await accountService.ConfirmEmail(customerId, token);
 
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
 
             return Ok(result);

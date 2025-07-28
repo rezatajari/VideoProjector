@@ -8,7 +8,7 @@ namespace VideoProjector.Services.Impelements
 {
     public class ProductService(IProductRepository repo, ILogger<ProductService> logger) : IProductService
     {
-        public async Task<ResponseCenter<List<ProductListDto>>> GetProductList()
+        public async Task<GeneralResponse<List<ProductListDto>>> GetProductList()
         {
 
             var products = await repo.GetAllProducts();
@@ -29,7 +29,7 @@ namespace VideoProjector.Services.Impelements
             return ResponseCenter.CreateSuccessResponse(data: productsDto);
         }
 
-        public async Task<ResponseCenter<ProductDetailDto>> GetProductDetail(GetProductDto getProduct)
+        public async Task<GeneralResponse<ProductDetailDto>> GetProductDetail(GetProductDto getProduct)
         {
             var product = await repo.GetProductById(getProduct.ProductId);
             if (product == null)
@@ -51,7 +51,7 @@ namespace VideoProjector.Services.Impelements
             return ResponseCenter.CreateSuccessResponse(data: productDetails);
         }
 
-        public async Task<ResponseCenter<List<ProductListDto>>> GetProductSearch(ProductSearchDto searchProduct)
+        public async Task<GeneralResponse<List<ProductListDto>>> GetProductSearch(ProductSearchDto searchProduct)
         {
             var result = await repo.GetProductSearch(searchProduct);
             if (result.Count == 0)

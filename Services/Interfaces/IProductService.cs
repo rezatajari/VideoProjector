@@ -5,8 +5,8 @@ namespace VideoProjector.Services.Interfaces
 {
     public interface IProductService
     {
-        Task<ResponseCenter<List<ProductListDto>>> GetProductList();
-        Task<ResponseCenter<ProductDetailDto>> GetProductDetail(GetProductDto getProduct);
-        Task<ResponseCenter<List<ProductListDto>>> GetProductSearch(ProductSearchDto searchProduct);
+        Task<GeneralResponse<List<ProductListDto>>> GetProductList();
+        Task<GeneralResponse<ProductDetailDto>> GetProductDetail(GetProductDto getProduct);
+        Task<GeneralResponse<List<ProductListDto>>> GetProductSearch(ProductSearchDto searchProduct);
     }
 }
