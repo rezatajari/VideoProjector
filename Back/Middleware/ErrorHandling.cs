@@ -29,10 +29,8 @@ namespace VideoProjector.Middleware
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            var response = ResponseCenter.CreateErrorResponse<object>(
-                message: "An internal server error occurred. Please try again later.",
-                errorCode: "INTERNAL_SERVER_ERROR"
-            );
+            var response =
+                GeneralResponse<object>.Failure(message: "An internal server error occurred. Please try again later.");
 
             return context.Response.WriteAsJsonAsync(response);
         }

@@ -1,5 +1,5 @@
-﻿using VideoProjector.Common;
-using VideoProjector.Data.Repositories.Interfaces;
+﻿using Back.Repositories.Interfaces;
+using VideoProjector.Common;
 using VideoProjector.DTOs.Order;
 using VideoProjector.DTOs.OrderDetail;
 using VideoProjector.Models;
@@ -19,9 +19,7 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
     {
         var orders = await repo.ListOrder(customerId);
         if (orders.Count == 0)
-            return ResponseCenter.CreateErrorResponse<List<OrderListDto>>(
-                message: "Order is null",
-                errorCode: "NULL");
+            return GeneralResponse<List<OrderListDto>>.Failure(message: "Order is null");
 
         var ordersDto = orders.Select(o => new OrderListDto
         {
@@ -31,7 +29,7 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
             TotalAmount = o.TotalAmount
         }).ToList();
 
-        return ResponseCenter.CreateSuccessResponse(ordersDto);
+        return GeneralResponse<List<OrderListDto>>.Success(ordersDto);
     }
 
     /// <summary>
@@ -43,9 +41,7 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
     {
         var orderDetails = await repo.GetOrderDetails(orderId);
         if (orderDetails == null || orderDetails.Count == 0)
-            return ResponseCenter.CreateErrorResponse<List<OrderDetailDto>>(
-                message: "Order detail is null",
-                errorCode: "NULL");
+            return GeneralResponse<List<OrderDetailDto>>.Failure(message: "Order detail is null");
 
         var orderDetailDto = orderDetails.Select(order => new OrderDetailDto
         {
@@ -57,7 +53,7 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
             TotalAmount = order.Order.TotalAmount
         }).ToList();
 
-        return ResponseCenter.CreateSuccessResponse(data: orderDetailDto);
+        return GeneralResponse<List<OrderDetailDto>>.Success(data: orderDetailDto);
     }
 
     /// <summary>
@@ -69,9 +65,7 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
     {
         var order = await repo.GetOrder(orderId);
         if (order == null)
-            return ResponseCenter.CreateErrorResponse<OrderGetDto>(
-                message: "Order is null",
-                errorCode: "NULL");
+            return GeneralResponse<OrderGetDto>.Failure(message: "Order is null");
 
         var orderDto = new OrderGetDto
         {
@@ -93,7 +87,7 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
             }).ToList()
         };
 
-        return ResponseCenter.CreateSuccessResponse(data: orderDto);
+        return GeneralResponse<OrderGetDto>.Success(data: orderDto);
     }
 
     /// <summary>
@@ -104,26 +98,20 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
     public async Task<GeneralResponse<bool>> UpdateOrderByCustomer(CustomerOrderUpdateDto orderUpdate)
     {
         if (orderUpdate == null)
-            return ResponseCenter.CreateErrorResponse<bool>(
-                message: "Order update data is null",
-                errorCode: "NULL");
+            return GeneralResponse<bool>.Failure(message: "Order update data is null");
 
         var order = await repo.GetOrder(orderUpdate.OrderId);
         if (order == null)
-            return ResponseCenter.CreateErrorResponse<bool>(
-                message: "Your order is the same as before",
-                errorCode: "SAME");
+            return GeneralResponse<bool>.Failure(message: "Your order is the same as before");
 
         if (order.ShippingAddress == orderUpdate.ShippingAddress)
-            return ResponseCenter.CreateErrorResponse<bool>(
-                message: "You order is same before",
-                errorCode: "SAME");
+            return GeneralResponse<bool>.Failure(message: "You order is same before");
 
         order.ShippingAddress = orderUpdate.ShippingAddress;
         await repo.UpdateOrder(order);
 
         logger.LogInformation("Order is updated and order ID is: {OrderId}", order.OrderId);
-        return ResponseCenter.CreateSuccessResponse(data: true);
+        return GeneralResponse<bool>.Success(data: true);
     }
 
     /// <summary>
@@ -151,7 +139,7 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
 
         await repo.AddOrder(order);
         logger.LogInformation("Order is created for this customer ID: {CustomerId}", orderAdd.CustomerId);
-        return ResponseCenter.CreateSuccessResponse(data: true);
+        return GeneralResponse<bool>.Success(data: true);
     }
 
     /// <summary>
@@ -163,18 +151,14 @@ public class OrderService(IOrderRepository repo, ILogger<OrderService> logger) :
     {
         var order = await repo.GetOrder(orderId);
         if (order == null)
-            return ResponseCenter.CreateErrorResponse<bool>(
-                message: "Order is null",
-                errorCode: "NULL");
+            return GeneralResponse<bool>.Failure(message: "Order is null");
 
         if (!order.ShippingDate.HasValue || order.ShippingDate.Value <= DateTime.Now.AddDays(-5))
-            return ResponseCenter.CreateErrorResponse<bool>(
-                message: "Order cannot be deleted",
-                errorCode: "CANNOT_DELETE");
+            return GeneralResponse<bool>.Failure(message: "Order cannot be deleted");
 
         await repo.DeleteOrder(order);
         logger.LogInformation("Order is deleted and order ID is: {OrderId}", orderId);
-        return ResponseCenter.CreateSuccessResponse(data: true);
+        return GeneralResponse<bool>.Success(data: true);
 
     }
 }

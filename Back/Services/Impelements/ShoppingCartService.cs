@@ -1,5 +1,5 @@
-﻿using VideoProjector.Common;
-using VideoProjector.Data.Repositories.Interfaces;
+﻿using Back.Repositories.Interfaces;
+using VideoProjector.Common;
 using VideoProjector.DTOs.ShoppingCart;
 using VideoProjector.Models;
 using VideoProjector.Services.Interfaces;
@@ -14,7 +14,7 @@ namespace VideoProjector.Services.Impelements
             // Check duplicate cart
             var cart = await repo.GetShoppingCart(cartDto.CustomerId);
             if (cart != null)
-                return ResponseCenter.CreateSuccessResponse(true);
+                return GeneralResponse<bool>.Success(data: true);
 
             // Generate cart
             cart = new ShoppingCart
@@ -26,11 +26,9 @@ namespace VideoProjector.Services.Impelements
 
             var result = await repo.AddShoppingCart(cart);
             if (result)
-                return ResponseCenter.CreateSuccessResponse(data: true);
+                return GeneralResponse<bool>.Success(data: true);
             logger.LogWarning("Don't add cart for this customerId: {customerId}", cartDto.CustomerId);
-            return ResponseCenter.CreateErrorResponse<bool>(
-                message: "Don't add into database",
-                errorCode: "Failed_ERROR");
+            return GeneralResponse<bool>.Failure(message: "Don't add into database");
 
         }
 
@@ -55,10 +53,8 @@ namespace VideoProjector.Services.Impelements
             };
             var result = await repo.AddShoppingCartItem(item);
             if (!result)
-                return ResponseCenter.CreateErrorResponse<bool>(
-                    message: "Failed to add item to cart",
-                    errorCode: "FAILED_ERROR");
-            return ResponseCenter.CreateSuccessResponse(data: true);
+                return GeneralResponse<bool>.Failure(message: "Failed to add item to cart");
+            return GeneralResponse<bool>.Success(data: true);
         }
 
         public async Task<GeneralResponse<List<ShoppingCartItemDto>>> GetShoppingCartItems(int shoppingCartId)
@@ -71,7 +67,7 @@ namespace VideoProjector.Services.Impelements
                 Price = it.Price,
             }).ToList();
 
-            return ResponseCenter.CreateSuccessResponse(data: cartItemsDto);
+            return GeneralResponse<List<ShoppingCartItemDto>>.Success(data: cartItemsDto);
         }
 
         public async Task<GeneralResponse<bool>> UpdateCartItem(List<ShoppingCartItemDto> itemDto, int shoppingCartId)
@@ -92,36 +88,30 @@ namespace VideoProjector.Services.Impelements
             // Update items
             var result = await repo.UpdateShoppingCartItem(cartItems);
             if (!result)
-                return ResponseCenter.CreateErrorResponse<bool>(
-                    message: "Failed to update shopping cart items",
-                    errorCode: "FAILED_ERROR");
-            return ResponseCenter.CreateSuccessResponse(data: true);
+                return GeneralResponse<bool>.Failure(message: "Failed to update shopping cart items");
+            return GeneralResponse<bool>.Success(data: true);
         }
 
         public async Task<GeneralResponse<bool>> RemoveCartItem(int shoppingCartItemId)
         {
             var result = await repo.DeleteShoppingCartItem(shoppingCartItemId);
             if (!result)
-                return ResponseCenter.CreateErrorResponse<bool>(
-                    message: "Failed to delete shopping cart item",
-                    errorCode: "FAILED_ERROR");
-            return ResponseCenter.CreateSuccessResponse(data: true);
+                return GeneralResponse<bool>.Failure(message: "Failed to delete shopping cart item");
+            return GeneralResponse<bool>.Success(data: true);
         }
 
         public async Task<GeneralResponse<bool>> ValidateCart(int shoppingCartId)
         {
             var result = await repo.IsCartProcessable(shoppingCartId);
             if (!result)
-                return ResponseCenter.CreateErrorResponse<bool>(
-                    message: "Cart is not processable",
-                    errorCode: "FAILED_ERROR");
-            return ResponseCenter.CreateSuccessResponse(data: true);
+                return GeneralResponse<bool>.Failure(message: "Cart is not processable");
+            return GeneralResponse<bool>.Success(data: true);
         }
 
         public GeneralResponse<decimal> GetTotalPriceItems(List<ShoppingCartItemDto> cartItemsDto)
         {
             var totalPrice = cartItemsDto.Sum(item => item.TotalPrice);
-            return ResponseCenter.CreateSuccessResponse(data: totalPrice);
+            return GeneralResponse<decimal>.Success(data: totalPrice);
         }
     }
 }

@@ -2,7 +2,7 @@
 using VideoProjector.DTOs.Category;
 using VideoProjector.Models;
 
-namespace VideoProjector.Data.Repositories.Interfaces
+namespace Back.Repositories.Interfaces
 {
     public interface ICategoryRepository
     {

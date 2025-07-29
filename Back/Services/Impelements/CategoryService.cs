@@ -1,5 +1,5 @@
-﻿using VideoProjector.Common;
-using VideoProjector.Data.Repositories.Interfaces;
+﻿using Back.Repositories.Interfaces;
+using VideoProjector.Common;
 using VideoProjector.DTOs.Category;
 using VideoProjector.Models;
 using VideoProjector.Services.Interfaces;

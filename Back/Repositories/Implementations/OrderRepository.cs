@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Back.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using VideoProjector.Common;
-using VideoProjector.Data.Repositories.Interfaces;
+using VideoProjector.Data;
 using VideoProjector.Models;
 
-namespace VideoProjector.Data.Repositories.Implementations
+namespace Back.Repositories.Implementations
 {
     public class OrderRepository(VpDatabase database) : IOrderRepository
     {

@@ -1,7 +1,7 @@
 ﻿using VideoProjector.DTOs.Product;
 using VideoProjector.Models;
 
-namespace VideoProjector.Data.Repositories.Interfaces
+namespace Back.Repositories.Interfaces
 {
     public interface IProductRepository
     {

@@ -20,9 +20,7 @@ namespace VideoProjector.Services.Impelements
             if (customer == null)
             {
                 logger.LogWarning("Customer is not found and null by this ID: {ID}", customerId);
-                return ResponseCenter.CreateErrorResponse<ProfileDto>(
-                    message: "Customer is null",
-                    errorCode: "NULL");
+                return GeneralResponse<ProfileDto>.Failure(message: "Customer is null");
             }
 
             var profileDto = new ProfileDto
@@ -32,7 +30,7 @@ namespace VideoProjector.Services.Impelements
                 ProfilePicture = customer.ProfilePicture
             };
 
-            return ResponseCenter.CreateSuccessResponse(data: profileDto);
+            return GeneralResponse<ProfileDto>.Success(data: profileDto);
 
         }
 
@@ -42,9 +40,7 @@ namespace VideoProjector.Services.Impelements
             if (customer == null)
             {
                 logger.LogWarning("Customer by this ID {ID} is not found", customerId);
-                return ResponseCenter.CreateErrorResponse<EditDto>(
-                    message: "Customer is not found",
-                    errorCode: "NULL");
+                return GeneralResponse<EditDto>.Failure(message: "Customer is not found");
             }
 
             var editProfile = new EditDto
@@ -56,7 +52,7 @@ namespace VideoProjector.Services.Impelements
             };
 
             logger.LogInformation("Get edit profile successful for this ID: {ID}", customerId);
-            return ResponseCenter.CreateSuccessResponse(data: editProfile);
+            return GeneralResponse<EditDto>.Success(data: editProfile);
         }
 
         public async Task<GeneralResponse<IdentityResult>> EditProfile(EditDto editDto, string customerId)
@@ -65,17 +61,13 @@ namespace VideoProjector.Services.Impelements
             if (customer == null)
             {
                 logger.LogWarning("Customer is null by this ID: {ID}", customerId);
-                return ResponseCenter.CreateErrorResponse<IdentityResult>(
-                    message: "Customer is null",
-                    errorCode: "NULL");
+                return GeneralResponse<IdentityResult>.Failure(message: "Customer is null");
             }
 
             if (editDto.Email != customer.Email)
             {
                 logger.LogWarning("New email is not confirmed: {Email}", editDto.Email);
-                return ResponseCenter.CreateErrorResponse<IdentityResult>(
-                    message: "New email required to confirmed",
-                    errorCode: "NOT_CONFIRMED");
+                return GeneralResponse<IdentityResult>.Failure(message: "New email required to confirmed");
             }
 
             var getProfilePicturePath = await GenerateProfilePicture(editDto.ProfilePicture, editDto.CurrentProfilePicturePath);
@@ -89,13 +81,11 @@ namespace VideoProjector.Services.Impelements
             if (!result.Succeeded)
             {
                 logger.LogWarning("Update operation is problem for this ID: {ID}", customer.Id);
-                return ResponseCenter.CreateErrorResponse<IdentityResult>(
-                    message: "Failed update profile",
-                    errorCode: "FAILED_UPDATE");
+                return GeneralResponse<IdentityResult>.Failure(message: "Failed update profile");
             }
 
             logger.LogInformation("Profiled is successful to update for this ID: {ID}", customerId);
-            return ResponseCenter.CreateSuccessResponse(data: result, message: "Update successful");
+            return GeneralResponse<IdentityResult>.Success(data: result, message: "Update successful");
         }
 
         public async Task<GeneralResponse<IdentityResult>> UpdatePassword(UpdatePasswordDto updatePassword, string customerId)
@@ -104,9 +94,7 @@ namespace VideoProjector.Services.Impelements
             if (customer == null)
             {
                 logger.LogWarning("Customer is not fined by this ID: {ID}", customerId);
-                ResponseCenter.CreateErrorResponse<IdentityResult>(
-                    message: "Customer is not found",
-                    errorCode: "NULL");
+                GeneralResponse<IdentityResult>.Failure(message: "Customer is not found");
             }
 
             var result = await userManager.ChangePasswordAsync(customer!, updatePassword.CurrentPassword,
@@ -115,21 +103,17 @@ namespace VideoProjector.Services.Impelements
             if (!result.Succeeded)
             {
                 logger.LogWarning("Password does not update for this customer ID: {ID}", customerId);
-                return ResponseCenter.CreateErrorResponse<IdentityResult>(
-                    message: "Password does not update",
-                    errorCode: "FAILED_UPDATE");
+                return GeneralResponse<IdentityResult>.Failure(message: "Password does not update");
             }
 
             logger.LogInformation("Password update successfully for this ID: {ID}", customerId);
-            return ResponseCenter.CreateSuccessResponse(data: result, message: "Password updated");
+            return GeneralResponse<IdentityResult>.Success(data: result, message: "Password updated");
         }
 
         private async Task<GeneralResponse<string>> GenerateProfilePicture(IFormFile editDtoProfilePicture, string currentProfilePicture)
         {
             if (editDtoProfilePicture is not { Length: > 0 })
-                return ResponseCenter.CreateErrorResponse<string>(
-                    message: "No file uploaded.",
-                    errorCode: "NO_FILE");
+                return GeneralResponse<string>.Failure(message: "No file uploaded.");
 
             // Check file extension (optional)
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
@@ -138,9 +122,7 @@ namespace VideoProjector.Services.Impelements
             if (!allowedExtensions.Contains(fileExtension))
             {
                 logger.LogWarning("Invalid format picture");
-                return ResponseCenter.CreateErrorResponse<string>(
-                    message: "Invalid file format. Please upload a .jpg, .jpeg, or .png image.",
-                    errorCode: "INVALID_FORMAT");
+                return GeneralResponse<string>.Failure(message: "Invalid file format. Please upload a .jpg, .jpeg, or .png image.");
             }
 
             // Generate a unique filename and save the file
@@ -154,7 +136,7 @@ namespace VideoProjector.Services.Impelements
 
             var fileUrl = $"/uploads/{fileName}";
 
-            if (string.IsNullOrEmpty(currentProfilePicture)) return ResponseCenter.CreateSuccessResponse(data: fileUrl);
+            if (string.IsNullOrEmpty(currentProfilePicture)) return GeneralResponse<string>.Success(data: fileUrl);
 
             var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), currentProfilePicture.TrimStart('/'));
             if (File.Exists(oldFilePath))
@@ -162,7 +144,7 @@ namespace VideoProjector.Services.Impelements
                 File.Delete(oldFilePath);
             }
 
-            return ResponseCenter.CreateSuccessResponse(data: fileUrl);
+            return GeneralResponse<string>.Success(data: fileUrl);
         }
     }
 }

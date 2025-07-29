@@ -1,8 +1,8 @@
+using Back.Repositories.Implementations;
+using Back.Repositories.Interfaces;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using VideoProjector.Configuration;
-using VideoProjector.Data.Repositories.Implementations;
-using VideoProjector.Data.Repositories.Interfaces;
 using VideoProjector.Middleware;
 using VideoProjector.Services.Impelements;
 using VideoProjector.Services.Impelements.Account;

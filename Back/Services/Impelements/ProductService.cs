@@ -1,6 +1,5 @@
-﻿using VideoProjector.Common;
-using VideoProjector.Data.Repositories.Implementations;
-using VideoProjector.Data.Repositories.Interfaces;
+﻿using Back.Repositories.Interfaces;
+using VideoProjector.Common;
 using VideoProjector.DTOs.Product;
 using VideoProjector.Services.Interfaces;
 
@@ -13,9 +12,7 @@ namespace VideoProjector.Services.Impelements
 
             var products = await repo.GetAllProducts();
             if (products.Count == 0)
-                return ResponseCenter.CreateErrorResponse<List<ProductListDto>>(
-                    message: "No found products",
-                    errorCode: "NO_PRODUCTS");
+                return GeneralResponse<List<ProductListDto>>.Failure(message: "No found products");
 
             var productsDto = products.Select(p => new ProductListDto
             {
@@ -26,16 +23,14 @@ namespace VideoProjector.Services.Impelements
                 CategoryName = p.Category?.Name,
             }).ToList();
 
-            return ResponseCenter.CreateSuccessResponse(data: productsDto);
+            return GeneralResponse<List<ProductListDto>>.Success(data: productsDto);
         }
 
         public async Task<GeneralResponse<ProductDetailDto>> GetProductDetail(GetProductDto getProduct)
         {
             var product = await repo.GetProductById(getProduct.ProductId);
             if (product == null)
-                return ResponseCenter.CreateErrorResponse<ProductDetailDto>(
-                    message: "Product is null",
-                    errorCode: "NULL");
+                return GeneralResponse<ProductDetailDto>.Failure(message: "Product is null");
 
             var productDetails = new ProductDetailDto
             {
@@ -48,16 +43,14 @@ namespace VideoProjector.Services.Impelements
                 CategoryName = product.Category?.Name
             };
 
-            return ResponseCenter.CreateSuccessResponse(data: productDetails);
+            return GeneralResponse<ProductDetailDto>.Success(data: productDetails);
         }
 
         public async Task<GeneralResponse<List<ProductListDto>>> GetProductSearch(ProductSearchDto searchProduct)
         {
             var result = await repo.GetProductSearch(searchProduct);
             if (result.Count == 0)
-                return ResponseCenter.CreateErrorResponse<List<ProductListDto>>(
-                    message: "No found products",
-                    errorCode: "NO_PRODUCTS");
+                return GeneralResponse<List<ProductListDto>>.Failure(message: "No found products");
 
             var productsDto = result.Select(p => new ProductListDto
             {
@@ -68,7 +61,7 @@ namespace VideoProjector.Services.Impelements
                 CategoryName = p.Name
             }).ToList();
 
-            return ResponseCenter.CreateSuccessResponse(data: productsDto);
+            return GeneralResponse<List<ProductListDto>>.Success(data: productsDto);
         }
 
     }

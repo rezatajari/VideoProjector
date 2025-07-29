@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using VideoProjector.Data.Repositories.Interfaces;
+﻿using Back.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using VideoProjector.Data;
 using VideoProjector.DTOs.Product;
 using VideoProjector.Models;
 
-namespace VideoProjector.Data.Repositories.Implementations
+namespace Back.Repositories.Implementations
 {
     public class ProductRepository(VpDatabase database) : IProductRepository
     {

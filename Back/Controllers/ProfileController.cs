@@ -25,7 +25,7 @@ namespace VideoProjector.Controllers
 
             var result = await profileService.GetCustomerProfileById(customerId);
 
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }
@@ -36,7 +36,7 @@ namespace VideoProjector.Controllers
             var customerId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var result = await profileService.GetEditProfile(customerId);
 
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }
@@ -45,17 +45,12 @@ namespace VideoProjector.Controllers
         public async Task<IActionResult> Edit([FromForm] EditDto editDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ResponseCenter.CreateErrorResponse<EditDto>(
-                    message: "Validation failed",
-                    errorCode: "VALIDATION_ERROR",
-                    validationErrors: ModelState.Values.SelectMany(v => v.Errors).
-                        Select(e => e.ErrorMessage).
-                        ToList()));
+                return BadRequest(GeneralResponse<EditDto>.Failure(message: "Validation failed"));
 
             var customerId = User.FindFirst(type: ClaimTypes.NameIdentifier)?.Value;
             var result = await profileService.EditProfile(editDto, customerId!);
 
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }
@@ -64,12 +59,7 @@ namespace VideoProjector.Controllers
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordDto updatePassword)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ResponseCenter.CreateErrorResponse<UpdatePasswordDto>(
-                    message: "Validation failed",
-                    errorCode: "VALIDATION_ERROR",
-                    validationErrors: ModelState.Values.SelectMany(v => v.Errors).
-                        Select(e => e.ErrorMessage).
-                        ToList()));
+                return BadRequest(GeneralResponse<UpdatePasswordDto>.Failure(message: "Validation failed"));
 
             var customerId = User.FindFirst(type: ClaimTypes.NameIdentifier)?.Value;
 

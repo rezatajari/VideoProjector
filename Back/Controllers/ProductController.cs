@@ -25,7 +25,7 @@ namespace VideoProjector.Controllers
         {
             var result = await productService.GetProductList();
 
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }
@@ -34,14 +34,10 @@ namespace VideoProjector.Controllers
         public async Task<IActionResult> GetProductDetail([FromBody] GetProductDto productId)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ResponseCenter.CreateErrorResponse<GetProductDto>(
-                    message: "Validation failed",
-                    errorCode: "VALIDATION_ERROR",
-                    validationErrors: ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
-                        .ToList()));
+                return BadRequest(GeneralResponse<GetProductDto>.Failure(message: "Validation failed"));
 
             var response = await productService.GetProductDetail(productId);
-            if (response.Status == "Error")
+            if (!response.IsSuccess)
                 return BadRequest(response);
             return Ok(response);
         }
@@ -50,13 +46,10 @@ namespace VideoProjector.Controllers
         public async Task<IActionResult> Search([FromBody] ProductSearchDto searchDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ResponseCenter.CreateErrorResponse<ProductSearchDto>(message: "Validation failed",
-                    errorCode: "VALIDATION_ERROR",
-                    validationErrors: ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
-                        .ToList()));
+                return BadRequest(GeneralResponse<ProductSearchDto>.Failure(message: "Validation failed"));
 
             var result = await productService.GetProductSearch(searchDto);
-            if (result.Status == "Error")
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }

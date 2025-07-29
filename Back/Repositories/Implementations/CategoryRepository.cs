@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using VideoProjector.Data.Repositories.Interfaces;
+﻿using Back.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using VideoProjector.Data;
 using VideoProjector.Models;
 
-namespace VideoProjector.Data.Repositories.Implementations
+namespace Back.Repositories.Implementations
 {
     public class CategoryRepository(VpDatabase db) : ICategoryRepository
     {
