@@ -1,8 +1,5 @@
-﻿using System.Security.AccessControl;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using VideoProjector.Common;
 using VideoProjector.DTOs.Order;
 using VideoProjector.Services.Interfaces;

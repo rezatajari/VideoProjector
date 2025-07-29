@@ -1,6 +1,6 @@
 ﻿using VideoProjectorFront.DTOs.Account;
 
-namespace VideoProjectorFront.Pages.Account
+namespace Front.Pages.Account
 {
     public partial class Register
     {

@@ -8,10 +8,10 @@ namespace VideoProjector.Controllers
     [ApiController]
     public class CategoriesController(ICategoryService categoryService) : ControllerBase
     {
-        private readonly ICategoryService _categoryService = categoryService;
+        [HttpGet(template:"list")]
         public async Task<IActionResult> Categories()
         {
-            var result = await _categoryService.Categories();
+            var result = await categoryService.Categories();
 
             if (!result.IsSuccess)
                 return BadRequest(result);

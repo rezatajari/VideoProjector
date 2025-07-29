@@ -1,9 +1,9 @@
 ﻿using VideoProjectorFront.DTOs.Account;
 
-namespace VideoProjectorFront.Pages.Account
+namespace Front.Pages.Account
 {
     public partial class Login
     {
-        private readonly LoginDto _loginModel = new();
+        private readonly  LoginDto _loginModel = new();
     }
 }

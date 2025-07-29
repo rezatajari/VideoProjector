@@ -7,10 +7,9 @@ namespace Back.Repositories.Implementations
 {
     public class CategoryRepository(VpDatabase db) : ICategoryRepository
     {
-        private readonly VpDatabase _db = db;
         public async Task<List<Category>> CategoriesAsync()
         {
-            return await _db.Categories
+            return await db.Categories
                            .AsNoTracking()
                            .Include(p => p.Products)
                            .ToListAsync();

@@ -1,22 +1,49 @@
 ﻿@page "/Categories/Index"
 
 
-<h2>Product Categories</h2>
+<h2 class="mb-4">Product Categories</h2>
 
-<div class="row">
-    @foreach (var category in _categories)
-    {
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-            <NavLink class="card text-decoration-none text-dark" href="@($"/Categories/Details/{category.CategoryId}")">
-                <img class="card-img-top img-fluid" src="@category.ImageUrl" alt="@category.Name" />
-                <div class="card-body">
-                    <h5 class="card-title">
-                        @category.Name
-                        <span class="badge bg-primary">@category.ProductCount</span>
-                    </h5>
-                    <p class="card-text">@category.Description</p>
-                </div>
-            </NavLink>
+@if (_isLoading)
+{
+    
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
         </div>
-    }
-</div>
+    </div>
+}
+else if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-trangle-fill me-2"></i>
+        @_errorMessage
+        <button class="btn btn-sm btn-outline-danger m-sm-3" @onclick="LoadCategories"></button>
+    </div>
+}else if (!_categories.Any())
+{
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle-fill me-2"></i>
+        No categories found.
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var category in _categories)
+        {
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                <NavLink class="card text-decoration-none text-dark" href="@($"/Categories/Details/{category.CategoryId}")">
+                    <img class="card-img-top img-fluid" src="@category.ImageUrl" alt="@category.Name" />
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            @category.Name
+                            <span class="badge bg-primary">@category.ProductCount</span>
+                        </h5>
+                        <p class="card-text">@category.Description</p>
+                    </div>
+                </NavLink>
+            </div>
+        }
+    </div>
+}
+

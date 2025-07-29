@@ -23,6 +23,13 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFile = Path.Combine(AppContext.BaseDirectory, "VideoProjector.xml");
     options.IncludeXmlComments(xmlFile);
 });
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowBlazor", policy => {
+        policy.WithOrigins( "https://localhost:7296")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 
 builder.Services.AddLogging();
@@ -58,7 +65,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 var app = builder.Build();
-
+app.UseCors("AllowBlazor");
 app.UseStaticFiles();
 
 // Enable Swagger middleware
