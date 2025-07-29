@@ -1,8 +1,8 @@
 ﻿
 
 using System.Net.Http.Json;
+using Front.DTOs.Category;
 using Microsoft.AspNetCore.Components;
-using VideoProjectorFront.DTOs.Category;
 
 namespace Front.Pages.Categories
 {
@@ -31,7 +31,7 @@ namespace Front.Pages.Categories
             }
             catch (Exception ex)
             {
-                _errorMessage = $"Failed to load categories: {ex.Message}";
+                _errorMessage = "Failed to load categories";
             }
             finally
             {

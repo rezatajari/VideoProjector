@@ -14,5 +14,26 @@ namespace Back.Repositories.Implementations
                            .Include(p => p.Products)
                            .ToListAsync();
         }
+
+        public async Task<Category> CategoryAsync(int categoryId)
+        {
+         return await db.Categories
+                .Where(c=>c.CategoryId==categoryId)
+                .Select(c=>new Category
+                {
+                    Name = c.Name,
+                    Description = c.Description,
+                    ImageUrl = c.ImageUrl,
+                    Products = c.Products.Select(p=>new Product
+                    {
+                        Name = p.Name,
+                        Description = p.Description,
+                        Price = p.Price,
+                        StockQuantity = p.StockQuantity
+                    }).ToList()
+                })
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+        }
     }
 }

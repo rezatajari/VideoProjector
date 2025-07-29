@@ -18,5 +18,16 @@ namespace VideoProjector.Controllers
 
             return Ok(result.Data);
         }
+
+        [HttpGet(template: "Details/{categoryId}")]
+        public async Task<IActionResult> Details(int categoryId)
+        {
+            var result = await categoryService.Category(categoryId);
+
+            if (!result.IsSuccess)
+                return BadRequest(result);
+
+            return Ok(result.Data);
+        }
     }
 }

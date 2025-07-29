@@ -1,4 +1,6 @@
-﻿using Back.Repositories.Interfaces;
+﻿using Back.DTOs.Category;
+using Back.DTOs.Product;
+using Back.Repositories.Interfaces;
 using VideoProjector.Common;
 using VideoProjector.DTOs.Category;
 using VideoProjector.Models;
@@ -22,6 +24,31 @@ namespace VideoProjector.Services.Impelements
             }).ToList();
 
             return GeneralResponse<List<CategoryDto>>.Success(data:categoriesDto);
+        }
+
+        public async Task<GeneralResponse<CategoryDetailsDto>> Category(int categoryId)
+        {
+            var category = await categoryRepository.CategoryAsync(categoryId);
+
+
+            var dto = new CategoryDetailsDto
+            {
+                Name = category.Name,
+                Description = category.Description,
+                ImageUrl = category.ImageUrl,
+                TotalProducts = category.Products?.Count ?? 0,
+                Products = category.Products?.Select(
+                        p => new ProductSummaryDto
+                        {
+                            Name = p.Name,
+                            ShortDescription = p.Description,
+                            Price = p.Price,
+                            StockCount = p.StockQuantity
+                        })
+                    .ToList() ?? []
+            };
+
+            return GeneralResponse<CategoryDetailsDto>.Success(data:dto);
         }
     }
 }

@@ -1,11 +1,13 @@
-﻿namespace Front.DTOs.Category
+﻿using Back.DTOs.Product;
+
+namespace Back.DTOs.Category
 {
-    public class CategoryDto
+    public class CategoryDetailsDto
     {
-        public int CategoryId { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
         public int TotalProducts { get; set; }
         public string? ImageUrl { get; set; }
+        public List<ProductSummaryDto> Products { get; set; } = [];
     }
 }
