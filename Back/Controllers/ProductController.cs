@@ -21,13 +21,13 @@ namespace VideoProjector.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet(template: "list")]
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> Products()
         {
-            var result = await productService.GetProductList();
+            var result = await productService.ProductList();
 
             if (!result.IsSuccess)
                 return BadRequest(result);
-            return Ok(result);
+            return Ok(result.Data);
         }
 
         [HttpGet(template: "Details/{productId}")]

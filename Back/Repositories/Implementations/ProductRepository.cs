@@ -8,10 +8,10 @@ namespace Back.Repositories.Implementations
 {
     public class ProductRepository(VpDatabase database) : IProductRepository
     {
-        public async Task<List<Product>> GetAllProducts()
+        public async Task<List<Product>> GetlProductsAsync()
         {
             return await database.Products
-                .Include(c => c.Category)
+                .AsNoTracking()
                 .ToListAsync();
         }
 

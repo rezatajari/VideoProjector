@@ -1,0 +1,46 @@
+﻿@page "/Products/List"
+
+<h3>Product List</h3>
+
+@if (_isLoading)
+{
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
+else if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-trangle-fill me-2"></i>
+        @_errorMessage
+    </div>
+}
+else if (!_model.Any())
+{
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle-fill me-2"></i>
+        No categories found.
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var product in _model)
+        {
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <NavLink class="card h-100 text-decoration-none text-dark shadow-sm" href="@($"/Products/Details/{product.ProductId}")">
+                    <img src="@product.ImageUrl"
+                         alt="@product.Name"
+                         class="card-img-top img-fluid"
+                         style="object-fit: cover; height: 200px;" />
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="mt-auto fw-bold text-success">@product.Price.ToString("C")</p>
+                    </div>
+                </NavLink>
+            </div>
+        }
+    </div>
+}

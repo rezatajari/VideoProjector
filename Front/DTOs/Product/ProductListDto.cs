@@ -1,4 +1,4 @@
-﻿namespace Back.DTOs.Product;
+﻿namespace Front.DTOs.Product;
 public record ProductListDto(
     int ProductId,
     string? Name,
