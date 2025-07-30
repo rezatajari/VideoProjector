@@ -1,5 +1,32 @@
 ﻿@page "/Products/List"
 
+
+
+<h3>Search Products</h3>
+
+<EditForm Model="@_searchModel" OnValidSubmit="SearchProducts">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="text-danger" />
+
+    <div class="row g-3 mb-4">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <InputText @bind-Value="_searchModel.SearchTerm" class="form-control" placeholder="Search by name..." />
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <InputNumber @bind-Value="_searchModel.MinPrice" class="form-control" placeholder="Min Price" />
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <InputNumber @bind-Value="_searchModel.MaxPrice" class="form-control" placeholder="Max Price" />
+        </div>
+
+        <div class="col-lg-2 col-md-6 col-sm-12 d-grid">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</EditForm>
+
 <h3>Product List</h3>
 
 @if (_isLoading)
@@ -40,6 +67,13 @@ else
                         <p class="mt-auto fw-bold text-success">@product.Price.ToString("C")</p>
                     </div>
                 </NavLink>
+                
+                <div class="card-footer bg-white border-0 text-end">
+                    <button class="btn btn-sm btn-outline-primary"
+                            @onclick="() => AddToCart(product)">
+                        <i class="bi bi-cart-plus"></i> Add to Cart
+                    </button>
+                </div>
             </div>
         }
     </div>

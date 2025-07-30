@@ -13,7 +13,7 @@ namespace VideoProjector.Controllers
     [Route(template: "api/shoppingcart")]
     [ApiController]
     [Authorize]
-    public class ShoppingCartController(IShoppingCartService shoppingCartService) : ControllerBase
+   public class ShoppingCartController(IShoppingCartService shoppingCartService) : ControllerBase
     {
         /// <summary>
         /// Adds a new shopping cart.

@@ -30,8 +30,6 @@ namespace Back.Repositories.Implementations
 
             if (!string.IsNullOrWhiteSpace(searchDto.SearchTerm))
                 query = query.Where(p => p.Name.Contains(searchDto.SearchTerm));
-            if (searchDto.CategoryId.HasValue)
-                query = query.Where(p => p.CategoryId == searchDto.CategoryId.Value);
             if (searchDto.MinPrice.HasValue)
                 query = query.Where(p => p.Price >= searchDto.MinPrice.Value);
             if (searchDto.MaxPrice.HasValue)

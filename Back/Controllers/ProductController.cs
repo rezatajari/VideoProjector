@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Back.DTOs.Product;
 using Microsoft.AspNetCore.Mvc;
 using VideoProjector.Common;
 using VideoProjector.DTOs.Product;
-using VideoProjector.Services.Impelements;
 using VideoProjector.Services.Interfaces;
 
 namespace VideoProjector.Controllers
@@ -42,11 +40,11 @@ namespace VideoProjector.Controllers
             return Ok(response.Data);
         }
 
-        [HttpGet(template: "search")]
+        [HttpPost(template: "Search")]
         public async Task<IActionResult> Search([FromBody] ProductSearchDto searchDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(GeneralResponse<ProductSearchDto>.Failure(message: "Validation failed"));
+                return BadRequest(GeneralResponse<ProductListDto>.Failure(message: "Validation failed"));
 
             var result = await productService.GetProductSearch(searchDto);
             if (!result.IsSuccess)
