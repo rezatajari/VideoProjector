@@ -1,4 +1,5 @@
-﻿using VideoProjector.Common;
+﻿using Back.DTOs.Product;
+using VideoProjector.Common;
 using VideoProjector.DTOs.Product;
 
 namespace VideoProjector.Services.Interfaces
@@ -6,7 +7,7 @@ namespace VideoProjector.Services.Interfaces
     public interface IProductService
     {
         Task<GeneralResponse<List<ProductListDto>>> GetProductList();
-        Task<GeneralResponse<ProductDetailDto>> GetProductDetail(GetProductDto getProduct);
+        Task<GeneralResponse<ProductDetailsDto>> Detail(int productId);
         Task<GeneralResponse<List<ProductListDto>>> GetProductSearch(ProductSearchDto searchProduct);
     }
 }

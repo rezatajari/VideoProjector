@@ -15,10 +15,10 @@ namespace Back.Repositories.Implementations
                 .ToListAsync();
         }
 
-        public async Task<Product> GetProductById(int productId)
+        public async Task<Product> Details(int productId)
         {
             var product = await database.Products
-                .Include(c => c.Category)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.ProductId == productId);
             return product;
 

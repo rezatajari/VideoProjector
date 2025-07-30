@@ -30,16 +30,16 @@ namespace VideoProjector.Controllers
             return Ok(result);
         }
 
-        [HttpGet(template: "detail")]
-        public async Task<IActionResult> GetProductDetail([FromBody] GetProductDto productId)
+        [HttpGet(template: "Details/{productId}")]
+        public async Task<IActionResult> GetProductDetail(int productId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(GeneralResponse<GetProductDto>.Failure(message: "Validation failed"));
 
-            var response = await productService.GetProductDetail(productId);
+            var response = await productService.Detail(productId);
             if (!response.IsSuccess)
                 return BadRequest(response);
-            return Ok(response);
+            return Ok(response.Data);
         }
 
         [HttpGet(template: "search")]

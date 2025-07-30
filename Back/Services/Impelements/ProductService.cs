@@ -1,4 +1,5 @@
-﻿using Back.Repositories.Interfaces;
+﻿using Back.DTOs.Product;
+using Back.Repositories.Interfaces;
 using VideoProjector.Common;
 using VideoProjector.DTOs.Product;
 using VideoProjector.Services.Interfaces;
@@ -26,24 +27,22 @@ namespace VideoProjector.Services.Impelements
             return GeneralResponse<List<ProductListDto>>.Success(data: productsDto);
         }
 
-        public async Task<GeneralResponse<ProductDetailDto>> GetProductDetail(GetProductDto getProduct)
+        public async Task<GeneralResponse<ProductDetailsDto>> Detail(int productId)
         {
-            var product = await repo.GetProductById(getProduct.ProductId);
+            var product = await repo.Details(productId);
             if (product == null)
-                return GeneralResponse<ProductDetailDto>.Failure(message: "Product is null");
+                return GeneralResponse<ProductDetailsDto>.Failure(message: "Product is null");
 
-            var productDetails = new ProductDetailDto
-            {
-                ProductId = product.ProductId,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                StockQuantity = product.StockQuantity,
-                ImageUrl = product.ImageUrl,
-                CategoryName = product.Category?.Name
-            };
+            var productDetails = new ProductDetailsDto(
+                product.ProductId,
+                product.Name,
+                product.Description,
+                product.Price,
+                product.StockQuantity,
+                product.ImageUrl
+            );
 
-            return GeneralResponse<ProductDetailDto>.Success(data: productDetails);
+            return GeneralResponse<ProductDetailsDto>.Success(data: productDetails);
         }
 
         public async Task<GeneralResponse<List<ProductListDto>>> GetProductSearch(ProductSearchDto searchProduct)

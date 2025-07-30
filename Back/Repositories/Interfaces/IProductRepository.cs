@@ -6,7 +6,7 @@ namespace Back.Repositories.Interfaces
     public interface IProductRepository
     {
         Task<List<Product>> GetAllProducts();
-        Task<Product> GetProductById(int productId);
+        Task<Product> Details(int productId);
         Task<List<Product>> GetProductSearch(ProductSearchDto searchDto);
     }
 }

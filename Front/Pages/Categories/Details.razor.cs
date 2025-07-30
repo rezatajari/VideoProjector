@@ -6,7 +6,7 @@ namespace Front.Pages.Categories
 {
     public partial class Details
     {
-        private CategoryDetailsDto _model = new();
+        private CategoryDetailsDto? _model = new();
         [Parameter]
         public int CategoryId { get; set; }
         [Inject]
@@ -20,7 +20,8 @@ namespace Front.Pages.Categories
             try
             {
                 _isLoading = true;
-                _model = await Http.GetFromJsonAsync<CategoryDetailsDto>(requestUri: $"http://localhost:61028/api/Categories/Details/{CategoryId}");
+                _model = await Http.GetFromJsonAsync<CategoryDetailsDto>(
+                    requestUri: $"api/Categories/Details/{CategoryId}");
             }
             catch (Exception ex)
             {
