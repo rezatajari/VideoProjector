@@ -1,7 +1,7 @@
 # VideoProjector
 
 ## Introduction
-This is a project for managing video projections.
+A sales management system designed to streamline the sales process for video projectors. The system handles product listings, customer orders, and sales tracking, built with a focus on clean code and maintainability.
 
 ## Prerequisites
 - .NET Core SDK
@@ -37,7 +37,7 @@ This is a project for managing video projections.
 ## Documentation
 For more detailed documentation, please refer to the following files in the `doc` folder:
 - [Database Documentation](https://github.com/rezatajari/VideoProjector/blob/master/docs/DATABASE.md)
-- [Response Center Documentation](https://github.com/rezatajari/VideoProjector/blob/master/docs/ResponseCenter.md)
+- [Response Center Documentation](https://github.com/rezatajari/VideoProjector/blob/master/docs/GeneralResponse.md)
 
 ## Contributing
 Fork the repository and submit a pull request.
