@@ -1,0 +1,6 @@
+Tasks list:
+
+implement from backend endpoint logic
+implement base service for front side (learn from course)
+implement logic in front based on backend side
+impelemnt ui view from logic of front side
