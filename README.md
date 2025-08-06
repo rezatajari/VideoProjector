@@ -3,6 +3,15 @@
 ## Introduction
 A sales management system designed to streamline the sales process for video projectors. The system handles product listings, customer orders, and sales tracking, built with a focus on clean code and maintainability.
 
+---
+
+## 📷 API Documentation
+
+![Swagger API UI](https://github.com/rezatajari/VideoProjector/blob/master/docs/images/SwaggerEndpoints.jpeg)  
+_Interactive Swagger documentation showing all available endpoints._
+
+---
+
 ## Prerequisites
 - .NET Core SDK
 - SQL Server
