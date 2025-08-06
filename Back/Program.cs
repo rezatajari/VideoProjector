@@ -19,7 +19,7 @@ builder.Services.AddOpenApi();
 // Add Swagger services
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "VideoProjector API", Version = "v1" });
     var xmlFile = Path.Combine(AppContext.BaseDirectory, "VideoProjector.xml");
     options.IncludeXmlComments(xmlFile);
 });
