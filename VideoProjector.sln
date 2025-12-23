@@ -17,6 +17,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation", "Presentation\Presentation.csproj", "{B552BDE7-62F8-427F-8CF0-6A875C1A9BD2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{C9CCE124-5622-426E-8E57-14745A58D438}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{3B410C80-DCDE-425A-B024-EB5B2D53CBA3}"
+	ProjectSection(SolutionItems) = preProject
+		Product.md = Product.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +63,7 @@ Global
 		{2C64622E-8372-49EA-91B6-9288B65DA773} = {F39EA5A4-B229-4ED6-BB20-C8C5CAB6B2C7}
 		{8201AFEB-5A8A-44AA-8F6F-2DB0BE4E5ED7} = {F39EA5A4-B229-4ED6-BB20-C8C5CAB6B2C7}
 		{B552BDE7-62F8-427F-8CF0-6A875C1A9BD2} = {F39EA5A4-B229-4ED6-BB20-C8C5CAB6B2C7}
+		{3B410C80-DCDE-425A-B024-EB5B2D53CBA3} = {C9CCE124-5622-426E-8E57-14745A58D438}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4DCAF6EF-FCEB-4139-9642-08E2E4A9C2DC}
