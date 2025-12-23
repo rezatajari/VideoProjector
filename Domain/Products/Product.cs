@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Domain.Product
+﻿namespace Domain.Product
 {
     public class Product
     {

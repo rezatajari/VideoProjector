@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Domain.Category
+﻿namespace Domain.Category
 {
     public class Category
     {

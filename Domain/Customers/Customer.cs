@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace VideoProjector.Models
+﻿namespace Domain.Customers
 {
     public class Customer : IdentityUser
     {
