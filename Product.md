@@ -2,12 +2,12 @@
 
 ## 1️⃣ Meaning
 
-**Definition:**
-A Product is any video projector model that your business sells.
-It represents the items customers can browse and purchase if available in the warehouse.
+**Definition:**  
+A Product is any video projector model that your business sells.  
+It represents the items customers can browse and purchase if available in the warehouse.  
 Accessories, cables, screens, or other related items are **not considered Products**.
 
-**Purpose:**
+**Purpose:**  
 To provide customers with a clear, browseable catalog of video projectors that they can buy directly.
 
 **Boundaries / What Product is NOT:**
@@ -39,4 +39,3 @@ To provide customers with a clear, browseable catalog of video projectors that t
 * Product can be listed for sale
 * Product can be marked as available or unavailable depending on warehouse stock
 * Product can be associated with categories (optional for filtering/search)
-
