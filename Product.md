@@ -40,7 +40,3 @@ To provide customers with a clear, browseable catalog of video projectors that t
 * Product can be marked as available or unavailable depending on warehouse stock
 * Product can be associated with categories (optional for filtering/search)
 
----
-
-✅ This is the **minimal, essential document** for Product in your domain.
-It’s **business-focused, concise, and explicit**, perfect for moving to **Responsibilities** next.

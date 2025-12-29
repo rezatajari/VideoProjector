@@ -1,4 +1,4 @@
-﻿namespace Domain.Product
+﻿namespace Domain.Products
 {
     public class Product
     {

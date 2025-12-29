@@ -1,6 +1,6 @@
 ﻿namespace Domain.Customers
 {
-    public class Customer : IdentityUser
+    public class Customer 
     {
         // Additional properties specific to Customer
         public string? Address { get; set; }

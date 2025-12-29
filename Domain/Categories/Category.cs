@@ -1,4 +1,4 @@
-﻿namespace Domain.Category
+﻿namespace Domain.Categories
 {
     public class Category
     {
