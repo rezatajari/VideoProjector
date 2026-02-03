@@ -1,4 +1,4 @@
-﻿namespace VideoProjector.Models
+﻿namespace Domain.Products
 {
     public class Product
     {
@@ -17,5 +17,4 @@
         // Navigation property to OrderDetails (many order details can link to one product)
         public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
     }
-
 }

@@ -1,4 +1,4 @@
-﻿namespace VideoProjector.Models
+﻿namespace Domain.Orders
 {
     public class Order
     {

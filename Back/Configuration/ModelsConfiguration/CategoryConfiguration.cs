@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using VideoProjector.Models;
 
 namespace VideoProjector.Configuration.ModelsConfiguration
 {

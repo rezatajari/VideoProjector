@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using VideoProjector.Data;
-using VideoProjector.Models;
 
 namespace VideoProjector.Configuration
 {
