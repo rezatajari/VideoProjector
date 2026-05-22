@@ -1,4 +1,4 @@
-﻿```csharp
+﻿
 namespace Domain.Entities
 {
     public class Product : BaseEntity
@@ -20,4 +20,4 @@ namespace Domain.Entities
         public virtual Category Category { get; set; }
     }
 }
-```
+
