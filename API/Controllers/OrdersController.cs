@@ -1,7 +1,9 @@
 ﻿using API.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared.Models;
+using System.Security.Claims;
 
 namespace API.Controllers;
 
@@ -10,8 +12,16 @@ namespace API.Controllers;
 public class OrdersController(VideoProjectorDbContext context) : ControllerBase
 {
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Order>> CreateOrder(Order order)
     {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized("کاربر احراز هویت نشده است.");
+        }
+
+        order.UserId = int.Parse(userIdClaim);
         var product = await context.Products
             .FirstOrDefaultAsync(p => p.Id == order.ProductId && !p.IsDeleted);
 
@@ -60,7 +70,6 @@ public class OrdersController(VideoProjectorDbContext context) : ControllerBase
             }
 
             product.QuantityForSale -= order.Quantity;
-
             order.TotalPrice = order.Quantity * product.SalePrice.Value;
         }
 
@@ -79,6 +88,7 @@ public class OrdersController(VideoProjectorDbContext context) : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
     {
         var orders = await context.Orders
@@ -89,6 +99,7 @@ public class OrdersController(VideoProjectorDbContext context) : ControllerBase
     }
 
     [HttpPut("{id}/status")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] OrderStatus newStatus)
     {
         var order = await context.Orders.FindAsync(id);
