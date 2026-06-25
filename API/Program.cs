@@ -3,18 +3,33 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<VideoProjectorDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("BlazorWasmPolicy", policy =>
+    {
+        policy.WithOrigins("https://localhost:7230")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseRouting();
+app.UseCors("BlazorWasmPolicy");
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<VideoProjectorDbContext>();
+    context.Database.Migrate();
 }
-
-app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();

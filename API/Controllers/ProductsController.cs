@@ -7,7 +7,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductsControllerr(VideoProjectorDbContext context) : ControllerBase
+public class ProductsController(VideoProjectorDbContext context) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
