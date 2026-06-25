@@ -1,0 +1,147 @@
+﻿@using Client.Services
+@using System.ComponentModel.DataAnnotations
+@using Shared.Models
+@inject ProductService ProductService
+
+@if (IsVisible)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5); direction: rtl; text-align: right;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold">
+                        @(IsRental ? "📅 فرم رزرو و اجاره کالا" : "🛒 فرم خرید قطعی کالا")
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white ms-0 me-auto" @onclick="CloseModal"></button>
+                </div>
+
+                <EditForm Model="@_orderModel" OnValidSubmit="SubmitOrder">
+                    <DataAnnotationsValidator />
+
+                    <div class="modal-body">
+                        <h6 class="text-secondary mb-3">نام محصول: <strong class="text-dark">@SelectedProduct?.Name</strong></h6>
+
+                        @if (!string.IsNullOrEmpty(_errorMessage))
+                        {
+                            <div class="alert alert-danger py-2 small">@_errorMessage</div>
+                        }
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">تعداد درخواست:</label>
+                            <InputNumber class="form-control" @bind-Value="_orderModel.Quantity" />
+                            <ValidationMessage For="@(() => _orderModel.Quantity)" class="text-danger small" />
+                        </div>
+
+                        @if (IsRental)
+                        {
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label small fw-bold">تاریخ شروع اجاره:</label>
+                                    <InputDate class="form-control" @bind-Value="_orderModel.StartDate" />
+                                    <ValidationMessage For="@(() => _orderModel.StartDate)" class="text-danger small" />
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label class="form-label small fw-bold">تاریخ پایان اجاره:</label>
+                                    <InputDate class="form-control" @bind-Value="_orderModel.EndDate" />
+                                    <ValidationMessage For="@(() => _orderModel.EndDate)" class="text-danger small" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="modal-footer d-flex gap-2 justify-content-end">
+                        <button type="button" class="btn btn-secondary btn-sm" @onclick="CloseModal">انصراف</button>
+                        <button type="submit" class="btn btn-success btn-sm px-4" disabled="@_isSubmitting">
+                            @if (_isSubmitting)
+                            {
+                                <span class="spinner-border spinner-border-sm" role="status"></span>
+                            }
+                            else
+                            {
+                                <span>ثبت نهایی سفارش</span>
+                            }
+                        </button>
+                    </div>
+                </EditForm>
+
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public Product? SelectedProduct { get; set; }
+    [Parameter] public bool IsRental { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    // ساخت یک مدل موقت برای هندل کردن ولیدیشن‌های فرم
+    private OrderFormModel _orderModel = new();
+    private string _errorMessage = "";
+    private bool _isSubmitting = false;
+
+    // بازنشانی مقادیر اولیه فرم در هر بار باز شدن مُدال
+    protected override void OnParametersSet()
+    {
+        if (IsVisible)
+        {
+            _orderModel = new OrderFormModel
+            {
+                Quantity = 1,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(1)
+            };
+        }
+    }
+
+    private async Task CloseModal()
+    {
+        _errorMessage = "";
+        await OnClose.InvokeAsync();
+    }
+
+    private async Task SubmitOrder()
+    {
+        if (SelectedProduct == null) return;
+
+        _isSubmitting = true;
+        _errorMessage = "";
+
+        var newOrder = new Order
+        {
+            ProductId = SelectedProduct.Id,
+            Quantity = _orderModel.Quantity,
+            IsRental = IsRental,
+            StartDate = IsRental ? _orderModel.StartDate : null,
+            EndDate = IsRental ? _orderModel.EndDate : null,
+            Status = OrderStatus.Pending
+        };
+
+        var response = await ProductService.CreateOrderAsync(newOrder);
+
+        if (response.IsSuccessStatusCode)
+        {
+            await CloseModal();
+        }
+        else
+        {
+            _errorMessage = await response.Content.ReadAsStringAsync();
+        }
+
+        _isSubmitting = false;
+    }
+
+    // کلاس کمکی برای فعال‌سازی ویژگی‌های اعتبارسنجی دات‌نت روی فرم
+    public class OrderFormModel
+    {
+        [Required(ErrorMessage = "وارد کردن تعداد الزامی است.")]
+        [Range(1, 100, ErrorMessage = "تعداد باید بین ۱ تا ۱۰۰ باشد.")]
+        public int Quantity { get; set; }
+
+        [Required(ErrorMessage = "تاریخ شروع الزامی است.")]
+        public DateTime StartDate { get; set; }
+
+        [Required(ErrorMessage = "تاریخ پایان الزامی است.")]
+        public DateTime EndDate { get; set; }
+    }
+}
