@@ -13,6 +13,19 @@
             </a>
         </li>
 
+        <AuthorizeView Roles="@Roles.Customer">
+            <Authorized>
+                <li class="nav-item border-top pt-2 mt-2">
+                    <span class="text-info small px-2 d-block mb-1">پنل کاربری</span>
+                </li>
+                <li class="nav-item">
+                    <a href="my-orders" class="nav-link text-white small d-flex align-items-center gap-2">
+                        🛒 تاریخچه سفارشات من
+                    </a>
+                </li>
+            </Authorized>
+        </AuthorizeView>
+
         <AuthorizeView Roles="@Roles.Admin">
             <Authorized>
                 <li class="nav-item border-top pt-2 mt-2">
@@ -24,7 +37,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin/products/manage" class="nav-link text-white small d-flex align-items-center gap-2">
+                    <a href="admin/products/create" class="nav-link text-white small d-flex align-items-center gap-2">
                         ➕ افزودن محصول جدید
                     </a>
                 </li>
