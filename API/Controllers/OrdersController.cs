@@ -70,12 +70,48 @@ public class OrdersController(VideoProjectorDbContext context) : ControllerBase
         return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
     }
 
-    // یک Endpoint ساده برای آدرس‌دهی محصول ثبت شده
     [HttpGet("{id}")]
     public async Task<ActionResult<Order>> GetOrderById(int id)
     {
         var order = await context.Orders.FindAsync(id);
         if (order == null) return NotFound();
         return Ok(order);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+    {
+        var orders = await context.Orders
+            .OrderByDescending(o => o.CreatedAt)
+            .ToListAsync();
+
+        return Ok(orders);
+    }
+
+    [HttpPut("{id}/status")]
+    public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] OrderStatus newStatus)
+    {
+        var order = await context.Orders.FindAsync(id);
+
+        if (order == null)
+        {
+            return NotFound("سفارش مورد نظر یافت نشد.");
+        }
+
+        if (order.IsRental == false && newStatus == OrderStatus.Canceled && order.Status != OrderStatus.Canceled)
+        {
+            // اگر فروش قطعی لغو شد، موجودی کالا باید به انبار فروش برگردد
+            var product = await context.Products.FindAsync(order.ProductId);
+            if (product != null)
+            {
+                product.QuantityForSale += order.Quantity;
+            }
+        }
+
+        order.Status = newStatus;
+
+        await context.SaveChangesAsync();
+
+        return NoContent();
     }
 }

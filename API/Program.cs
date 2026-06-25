@@ -5,6 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<VideoProjectorDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -32,4 +34,6 @@ if (app.Environment.IsDevelopment())
 }
 app.MapControllers();
 
+app.UseSwagger();
+app.UseSwaggerUI();
 app.Run();
