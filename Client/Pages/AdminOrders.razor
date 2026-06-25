@@ -1,0 +1,133 @@
+﻿@page "/admin/orders"
+@using Client.Services
+@using Shared.Models
+@inject OrderService OrderService
+
+<h3 class="mb-4 text-dark border-bottom pb-2">📦 مدیریت و مهندسی وضعیت سفارشات (پنل ادمین)</h3>
+
+@if (_orders == null)
+{
+    <div class="d-flex justify-content-center my-5">
+        <div class="spinner-border text-primary" role="status"></div>
+    </div>
+}
+else if (!_orders.Any())
+{
+    <div class="alert alert-info text-center">هیچ سفارشی تا این لحظه در سیستم ثبت نشده است.</div>
+}
+else
+{
+    <div class="table-responsive" style="direction: rtl; text-align: right;">
+        <table class="table table-bordered table-hover align-middle text-center small">
+            <thead class="table-dark">
+                <tr>
+                    <th>شناسه سفارش</th>
+                    <th>شناسه کالا</th>
+                    <th>نوع سفارش</th>
+                    <th>تعداد درخواست</th>
+                    <th>بازه زمانی (مخصوص اجاره)</th>
+                    <th>مبلغ کل (تومان)</th>
+                    <th>وضعیت فعلی</th>
+                    <th>تغییر وضعیت و اکشن‌ها</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in _orders)
+                {
+                    <tr>
+                        <td class="fw-bold">@order.Id</td>
+                        <td>@order.ProductId</td>
+                        <td>
+                            <span class="badge @(order.IsRental ? "bg-info text-dark" : "bg-primary")">
+                                @(order.IsRental ? "📅 اجاره روزانه" : "🛒 خرید قطعی")
+                            </span>
+                        </td>
+                        <td>@order.Quantity عدد</td>
+                        <td class="small text-muted">
+                            @if (order.IsRental)
+                            {
+                                <span>از @order.StartDate?.ToString("yyyy/MM/dd") <br> تا @order.EndDate?.ToString("yyyy/MM/dd")</span>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        <td class="fw-bold text-dark">@order.TotalPrice.ToString("N0")</td>
+                        <td>
+                            <span class="badge @GetStatusClass(order.Status)">
+                                @GetStatusTitle(order.Status)
+                            </span>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1 justify-content-center">
+                                @if (order.Status == OrderStatus.Pending)
+                                {
+                                    <button class="btn btn-success btn-xs py-1 px-2 text-white" @onclick="() => ChangeStatus(order.Id, OrderStatus.Delivered)">
+                                        🚚 تحویل دستگاه
+                                    </button>
+                                    <button class="btn btn-danger btn-xs py-1 px-2" @onclick="() => ChangeStatus(order.Id, OrderStatus.Canceled)">
+                                        ❌ لغو سفارش
+                                    </button>
+                                }
+                                @if (order.Status == OrderStatus.Delivered && order.IsRental)
+                                {
+                                    <button class="btn btn-primary btn-xs py-1 px-2" @onclick="() => ChangeStatus(order.Id, OrderStatus.Completed)">
+                                        ✅ دریافت و اتمام اجاره
+                                    </button>
+                                }
+                                @if (order.Status == OrderStatus.Delivered && !order.IsRental)
+                                {
+                                    <button class="btn btn-secondary btn-xs py-1 px-2" @onclick="() => ChangeStatus(order.Id, OrderStatus.Completed)">
+                                        🏁 اتمام پروسه فروش
+                                    </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<Order>? _orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadOrders();
+    }
+
+    private async Task LoadOrders()
+    {
+        _orders = await OrderService.GetOrdersAsync();
+    }
+
+    private async Task ChangeStatus(int orderId, OrderStatus newStatus)
+    {
+        var success = await OrderService.UpdateOrderStatusAsync(orderId, newStatus);
+        if (success)
+        {
+            await LoadOrders();
+        }
+    }
+
+    private string GetStatusClass(OrderStatus status) => status switch
+    {
+        OrderStatus.Pending => "bg-warning text-dark",
+        OrderStatus.Delivered => "bg-purple text-white",
+        OrderStatus.Completed => "bg-success",
+        OrderStatus.Canceled => "bg-danger",
+        _ => "bg-secondary"
+    };
+
+    private string GetStatusTitle(OrderStatus status) => status switch
+    {
+        OrderStatus.Pending => "در انتظار اقدام",
+        OrderStatus.Delivered => "تحویل داده شده / در حال استفاده",
+        OrderStatus.Completed => "پایان یافته و موفق",
+        OrderStatus.Canceled => "لغو شده",
+        _ => "نامشخص"
+    };
+}
