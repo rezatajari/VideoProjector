@@ -1,0 +1,68 @@
+﻿@page "/my-orders"
+@using Microsoft.AspNetCore.Authorization
+@using Shared.Models
+@using Microsoft.AspNetCore.Components.Authorization
+@inject HttpClient Http
+@attribute [Authorize(Roles = Roles.Customer)]
+
+<h3 class="mb-4">🛒 تاریخچه سفارشات من</h3>
+
+@if (orders == null)
+{
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">در حال بارگذاری...</span>
+    </div>
+}
+else if (!orders.Any())
+{
+    <div class="alert alert-info">شما هنوز هیچ سفارشی در سیستم ثبت نکرده‌اید.</div>
+}
+else
+{
+    <div class="table-responsive" style="direction: rtl; text-align: right;">
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>کد سفارش</th>
+                    <th>نوع درخواست</th>
+                    <th>تعداد</th>
+                    <th>مبلغ کل (تومان)</th>
+                    <th>وضعیت</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in orders)
+                {
+                    <tr>
+                        <td>@order.Id</td>
+                        <td>@(order.IsRental ? "🗓️ اجاره‌ای" : "💰 خرید نقدی")</td>
+                        <td>@order.Quantity</td>
+                        <td>@order.TotalPrice.ToString("N0")</td>
+                        <td>
+                            <span class="badge @GetStatusBadgeClass(order.Status)">
+                                @order.Status.ToString()
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<Order>? orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        orders = await Http.GetFromJsonAsync<List<Order>>("api/orders/my-orders");
+    }
+
+    private string GetStatusBadgeClass(OrderStatus status) => status switch
+    {
+        OrderStatus.Pending => "bg-warning text-dark",
+        OrderStatus.Confirmed => "bg-success",
+        OrderStatus.Canceled => "bg-danger",
+        _ => "bg-secondary"
+    };
+}

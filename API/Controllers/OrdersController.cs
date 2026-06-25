@@ -135,4 +135,24 @@ public class OrdersController(VideoProjectorDbContext context) : ControllerBase
 
         return NoContent();
     }
+
+    [HttpGet("my-orders")]
+    [Authorize] 
+    public async Task<ActionResult<IEnumerable<Order>>> GetMyOrders()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized("کاربر احراز هویت نشده است.");
+        }
+
+        var userId = int.Parse(userIdClaim);
+
+        var myOrders = await context.Orders
+            .Where(o => o.UserId == userId)
+            .OrderByDescending(o => o.CreatedAt)
+            .ToListAsync();
+
+        return Ok(myOrders);
+    }
 }
