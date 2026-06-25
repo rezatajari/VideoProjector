@@ -23,5 +23,15 @@ public class OrderConfiguration : BaseEntityConfiguration<Order>
         builder.Property(o => o.Status)
                .HasDefaultValue(OrderStatus.Pending)
                .IsRequired();
+
+        builder.HasOne<User>()
+                   .WithMany()
+                   .HasForeignKey(o => o.UserId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne<Product>()
+               .WithMany()
+               .HasForeignKey(o => o.ProductId)
+               .OnDelete(DeleteBehavior.Restrict);
     }
 }
