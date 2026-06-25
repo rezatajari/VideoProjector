@@ -42,7 +42,6 @@ public class AuthController(VideoProjectorDbContext context, TokenService tokenS
             return Unauthorized("ایمیل یا رمز عبور اشتباه است.");
         }
 
-        // بررسی صحت پسورد با متد Verify (خودش هش دیتابیس را بازخوانی و مقایسه می‌کند)
         if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
         {
             return Unauthorized("ایمیل یا رمز عبور اشتباه است.");
