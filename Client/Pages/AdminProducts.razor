@@ -4,7 +4,7 @@
 @using Shared.Models
 @inject ProductService ProductService
 @inject NavigationManager NavigationManager
-@attribute [Authorize]
+@attribute [Authorize(Roles = Roles.Admin)]
 
 <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
     <h3 class="text-dark m-0">⚙️ مدیریت انبار و کالاها (پنل ادمین)</h3>

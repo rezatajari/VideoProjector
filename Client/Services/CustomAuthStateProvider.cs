@@ -48,7 +48,6 @@ public class CustomAuthStateProvider(HttpClient http, IJSRuntime jsRuntime) : Au
 
         if (keyValuePairs != null)
         {
-            // ۱. بررسی هر دو مدل کلید احتمالی برای نقش (متن کوتاه یا آدرس استاندارد مایکروسافت)
             if (keyValuePairs.TryGetValue("role", out var roles) ||
                 keyValuePairs.TryGetValue(ClaimTypes.Role, out roles))
             {
@@ -56,7 +55,6 @@ public class CustomAuthStateProvider(HttpClient http, IJSRuntime jsRuntime) : Au
                 {
                     var rolesString = roles.ToString()!.Trim();
 
-                    // اگر کاربر چند نقش داشته باشد (به صورت آرایه [ "Admin", "User" ])
                     if (rolesString.StartsWith('['))
                     {
                         var parsedRoles = JsonSerializer.Deserialize<string[]>(rolesString);
@@ -67,19 +65,15 @@ public class CustomAuthStateProvider(HttpClient http, IJSRuntime jsRuntime) : Au
                     }
                     else
                     {
-                        // اگر کاربر فقط یک نقش داشته باشد (به صورت رشته معمولی)
                         claims.Add(new Claim(ClaimTypes.Role, rolesString));
                     }
                 }
 
-                // حذف کلیدهای خام قبلی برای جلوگیری از تکرار
                 keyValuePairs.Remove("role");
                 keyValuePairs.Remove(ClaimTypes.Role);
             }
 
-            // ۲. استخراج بقیه کلیم‌ها مثل نام کاربری و ایمیل
             claims.AddRange(keyValuePairs.Select(kvp => {
-                // یکسان‌سازی کلید نام کاربری برای بومی‌سازی دات‌نت
                 if (kvp.Key == "unique_name" || kvp.Key == "name")
                     return new Claim(ClaimTypes.Name, kvp.Value.ToString()!);
                 if (kvp.Key == "sub" || kvp.Key == "nameid")
