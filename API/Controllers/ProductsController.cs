@@ -38,7 +38,7 @@ public class ProductsController(VideoProjectorDbContext context) : ControllerBas
 
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<Product>> CreateProduct(Product product)
     {
         context.Products.Add(product);
@@ -48,7 +48,7 @@ public class ProductsController(VideoProjectorDbContext context) : ControllerBas
     }
 
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles =Roles.Admin)]
     public async Task<IActionResult> UpdateProduct(int id, Product product)
     {
         if (id != product.Id)
@@ -80,7 +80,7 @@ public class ProductsController(VideoProjectorDbContext context) : ControllerBas
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> DeleteProduct(int id)
     {
         var product = await context.Products.FindAsync(id);

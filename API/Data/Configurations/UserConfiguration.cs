@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Shared.Models;
 
 namespace API.Data.Configurations;
@@ -23,5 +24,7 @@ public class UserConfiguration : BaseEntityConfiguration<User>
         builder.Property(u => u.PasswordHash)
                .IsRequired();
 
+        builder.Property(u => u.Role)
+        .HasConversion<string>();
     }
 }
