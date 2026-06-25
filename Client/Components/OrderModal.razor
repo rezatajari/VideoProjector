@@ -75,7 +75,6 @@
     [Parameter] public bool IsRental { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
 
-    // ساخت یک مدل موقت برای هندل کردن ولیدیشن‌های فرم
     private OrderFormModel _orderModel = new();
     private string _errorMessage = "";
     private bool _isSubmitting = false;
@@ -131,7 +130,6 @@
         _isSubmitting = false;
     }
 
-    // کلاس کمکی برای فعال‌سازی ویژگی‌های اعتبارسنجی دات‌نت روی فرم
     public class OrderFormModel
     {
         [Required(ErrorMessage = "وارد کردن تعداد الزامی است.")]

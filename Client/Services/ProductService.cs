@@ -21,4 +21,20 @@ public class ProductService(HttpClient http)
     {
         return await http.PostAsJsonAsync("api/orders", order);
     }
+
+    public async Task<bool> DeleteProductAsync(int id)
+    {
+        var response = await http.DeleteAsync($"api/products/{id}");
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<HttpResponseMessage> CreateProductAsync(Product product)
+    {
+        return await http.PostAsJsonAsync("api/products", product);
+    }
+
+    public async Task<HttpResponseMessage> UpdateProductAsync(int id, Product product)
+    {
+        return await http.PutAsJsonAsync($"api/products/{id}", product);
+    }
 }
