@@ -1,46 +1,42 @@
-﻿<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark bg-gradient shadow" 
-     style="width: 260px; min-height: 100vh; height: 100%; direction: rtl; text-align: right; border-left: 1px solid rgba(255,255,255,0.1);">
-    
-    <div class="d-flex align-items-center mb-3 my-2 text-white text-decoration-none">
-        <span class="fs-5 fw-bold letter-spacing-1 d-flex align-items-center gap-2">
-            <span class="text-info">⚡</span> پنل ناوبری سیستم
-        </span>
-    </div>
-    
-    <hr class="bg-light opacity-25">
-    
-    <ul class="nav nav-pills flex-column mb-auto p-0 gap-1">
-        <li class="nav-item">
-            <NavLink Href="products" Match="NavLinkMatch.Prefix" 
-                     Class="nav-link text-white-50 d-flex align-items-center gap-3 py-2 px-3 rounded-3"
-                     ActiveClass="active bg-info text-dark fw-bold shadow-sm">
-                <span class="fs-5">🛍️</span> <span>کاتالوگ محصولات</span>
-            </NavLink>
-        </li>
-        <li class="nav-item">
-            <NavLink Href="admin/products" Match="NavLinkMatch.Prefix" 
-                     Class="nav-link text-white-50 d-flex align-items-center gap-3 py-2 px-3 rounded-3"
-                     ActiveClass="active bg-info text-dark fw-bold shadow-sm">
-                <span class="fs-5">⚙️</span> <span>مدیریت انبار (ادمین)</span>
-            </NavLink>
-        </li>
-        <li class="nav-item">
-            <NavLink Href="admin/orders" Match="NavLinkMatch.Prefix" 
-                     Class="nav-link text-white-50 d-flex align-items-center gap-3 py-2 px-3 rounded-3"
-                     ActiveClass="active bg-info text-dark fw-bold shadow-sm">
-                <span class="fs-5">📦</span> <span>مدیریت سفارشات (ادمین)</span>
-            </NavLink>
-        </li>
-    </ul>
-    
-    <hr class="bg-light opacity-25">
-    
-    <div class="d-flex align-items-center justify-content-between px-2 small text-white-50 opacity-75">
-        <span>نسخه سیستم</span>
-        <span class="badge bg-secondary">v1.0.0</span>
-    </div>
-</div>
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Shared.Models
 
+<div class="bg-dark text-white p-3 min-vh-100" style="width: 250px; direction: rtl; text-align: right;">
+    <div class="mb-4 text-center border-bottom pb-2">
+        <h6 class="text-muted small">منوی دسترسی</h6>
+    </div>
+
+    <ul class="nav nav-pills flex-column mb-auto gap-2">
+        <li class="nav-item">
+            <a href="products" class="nav-link text-white small d-flex align-items-center gap-2">
+                📦 کاتالوگ محصولات
+            </a>
+        </li>
+
+        <AuthorizeView Roles="@Roles.Admin">
+            <Authorized>
+                <li class="nav-item border-top pt-2 mt-2">
+                    <span class="text-warning small px-2 d-block mb-1">پنل مدیریت</span>
+                </li>
+                <li class="nav-item">
+                    <a href="admin/products" class="nav-link text-white small d-flex align-items-center gap-2">
+                        ⚙️ مدیریت انبار کالا
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin/products/manage" class="nav-link text-white small d-flex align-items-center gap-2">
+                        ➕ افزودن محصول جدید
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin/orders" class="nav-link text-white small d-flex align-items-center gap-2">
+                        📋 مدیریت سفارشات کل
+                    </a>
+                </li>
+            </Authorized>
+        </AuthorizeView>
+    </ul>
+</div>
 <style>
     .nav-pills .nav-link:hover:not(.active) {
         background-color: rgba(255, 255, 255, 0.05);
