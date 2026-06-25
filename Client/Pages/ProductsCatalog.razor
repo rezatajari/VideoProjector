@@ -74,7 +74,6 @@ else
 @code {
     private List<Product>? _products;
 
-    // متد چرخه حیات بلایزر برای دریافت اطلاعات زمان لود صفحه
     protected override async Task OnInitializedAsync()
     {
         _products = await ProductService.GetProductsAsync();
