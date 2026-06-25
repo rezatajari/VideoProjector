@@ -78,6 +78,9 @@ else
 
 @code {
     private List<Product>? _products;
+    private bool _isModalVisible = false;
+    private Product? _selectedProduct;
+    private bool _isRentalAction = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -86,13 +89,22 @@ else
 
     private void RentProduct(int productId)
     {
-        // در تسک ۶ این لاجیک به مُدال ثبت سفارش وصل می‌شود
-        Console.WriteLine($"درخواست اجاره برای کالا با آی‌دی: {productId}");
+        _selectedProduct = _products?.FirstOrDefault(p => p.Id == productId);
+        _isRentalAction = true;
+        _isModalVisible = true;
     }
 
     private void BuyProduct(int productId)
     {
-        // در تسک ۶ این لاجیک به مُدال ثبت سفارش وصل می‌شود
-        Console.WriteLine($"درخواست خرید برای کالا با آی‌دی: {productId}");
+        _selectedProduct = _products?.FirstOrDefault(p => p.Id == productId);
+        _isRentalAction = false;
+        _isModalVisible = true;
+    }
+
+    private async Task CloseOrderModal()
+    {
+        _isModalVisible = false;
+        // ریفرش کردن کاتالوگ برای به‌روزرسانی موجودی‌های جدید انبار بعد از خرید/اجاره
+        _products = await ProductService.GetProductsAsync();
     }
 }
