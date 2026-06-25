@@ -1,8 +1,10 @@
 ﻿@page "/admin/products"
 @using Client.Services
+@using Microsoft.AspNetCore.Authorization
 @using Shared.Models
 @inject ProductService ProductService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
     <h3 class="text-dark m-0">⚙️ مدیریت انبار و کالاها (پنل ادمین)</h3>

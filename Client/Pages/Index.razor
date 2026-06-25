@@ -1,5 +1,11 @@
-﻿<h3>Index</h3>
+﻿@page "/"
+@using Microsoft.AspNetCore.Authorization
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 @code {
-
+    protected override void OnInitialized()
+    {
+        NavigationManager.NavigateTo("products");
+    }
 }

@@ -1,8 +1,10 @@
 ﻿@page "/products"
 @using Client.Components
 @using Client.Services
+@using Microsoft.AspNetCore.Authorization
 @using Shared.Models
 @inject ProductService ProductService
+@attribute [Authorize]
 
 <h3 class="mb-4 text-dark border-bottom pb-2">🛍️ کاتالوگ و ویترین محصولات</h3>
 

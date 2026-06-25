@@ -1,10 +1,18 @@
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inherits LayoutComponentBase
 
 <div class="container-fluid p-0 m-0 min-vh-100 d-flex flex-column" style="font-family: Tahoma, Arial, sans-serif;">
     <Header />
 
     <div class="d-flex flex-row flex-grow-1 align-items-stretch">
-        <Sidebar />
+        
+        <AuthorizeView>
+            <Authorized>
+                <Sidebar />
+            </Authorized>
+            <NotAuthorized>
+                </NotAuthorized>
+        </AuthorizeView>
 
         <main class="flex-grow-1 p-4 bg-light" style="direction: rtl;">
             <div class="container bg-white p-4 rounded shadow-sm min-vh-100">
