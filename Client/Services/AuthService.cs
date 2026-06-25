@@ -31,7 +31,6 @@ public class AuthService(HttpClient http, IJSRuntime jsRuntime, AuthenticationSt
         var token = await response.Content.ReadAsStringAsync();
         await _js.InvokeVoidAsync("localStorage.setItem", "authToken", token);
 
-        // با این کار کل فرانت‌اَند فوراً متوجه لاگین شدن کاربر می‌شود
         _authStateProvider.NotifyUserAuthentication(token);
 
         return true;
