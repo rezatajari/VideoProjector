@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Shared.Models
 @inject OrderService OrderService
-@attribute [Authorize]
+@attribute [Authorize(Roles = Roles.Admin)]
 
 <h3 class="mb-4 text-dark border-bottom pb-2">📦 مدیریت و مهندسی وضعیت سفارشات (پنل ادمین)</h3>
 
