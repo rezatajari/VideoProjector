@@ -74,7 +74,6 @@ public class ProductsController(VideoProjectorDbContext context) : ControllerBas
         return NoContent(); 
     }
 
-
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProduct(int id)
     {
