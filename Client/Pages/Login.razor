@@ -1,0 +1,142 @@
+﻿@page "/login"
+@using Client.Services
+@using Shared.DTOs
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 75vh; direction: rtl; text-align: right;">
+    <div class="card shadow border-0" style="width: 450px; border-radius: 12px;">
+        <div class="card-header bg-primary text-white text-center py-3" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
+            <h5 class="m-0 fw-bold">@(IsRegisterMode ? "🔐 عضویت در سامانه" : "🔑 ورود به حساب کاربری")</h5>
+        </div>
+        <div class="card-body p-4">
+
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <div class="alert alert-danger py-2 small">@_errorMessage</div>
+            }
+
+            @if (IsRegisterMode)
+            {
+                <EditForm Model="@_registerModel" OnValidSubmit="HandleRegister">
+                    <DataAnnotationsValidator />
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">نام و نام خانوادگی:</label>
+                        <InputText class="form-control form-control-sm" @bind-Value="_registerModel.FullName" />
+                        <ValidationMessage For="@(() => _registerModel.FullName)" class="text-danger small" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">ایمیل:</label>
+                        <InputText class="form-control form-control-sm" @bind-Value="_registerModel.Email" style="direction: ltr;" />
+                        <ValidationMessage For="@(() => _registerModel.Email)" class="text-danger small" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">رمز عبور:</label>
+                        <InputText type="password" class="form-control form-control-sm" @bind-Value="_registerModel.Password" style="direction: ltr;" />
+                        <ValidationMessage For="@(() => _registerModel.Password)" class="text-danger small" />
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 btn-sm my-2" disabled="@_isSubmitting">
+                        @if (_isSubmitting)
+                        {
+                            <span class="spinner-border spinner-border-sm"></span>
+                        }
+                        else
+                        {
+
+                            <span>ثبت نام و ورود</span>
+                        }
+                    </button>
+                </EditForm>
+            }
+            else
+            {
+                <EditForm Model="@_loginModel" OnValidSubmit="HandleLogin">
+                    <DataAnnotationsValidator />
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">ایمیل:</label>
+                        <InputText class="form-control form-control-sm" @bind-Value="_loginModel.Email" style="direction: ltr;" />
+                        <ValidationMessage For="@(() => _loginModel.Email)" class="text-danger small" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">رمز عبور:</label>
+                        <InputText type="password" class="form-control form-control-sm" @bind-Value="_loginModel.Password" style="direction: ltr;" />
+                        <ValidationMessage For="@(() => _loginModel.Password)" class="text-danger small" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 btn-sm my-2" disabled="@_isSubmitting">
+                        @if (_isSubmitting)
+                        {
+                            <span class="spinner-border spinner-border-sm"></span>
+                        }
+                        else
+                        {
+
+                            <span>ورود به سیستم</span>
+                        }
+                    </button>
+                </EditForm>
+            }
+
+            <div class="text-center mt-3 border-top pt-3">
+                <button class="btn btn-link btn-sm text-decoration-none" @onclick="ToggleMode">
+                    @(IsRegisterMode ? "قبلاً ثبت نام کرده‌اید؟ اینجا وارد شوید" : "حساب کاربری ندارید؟ ثبت نام کنید")
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool IsRegisterMode { get; set; } = false;
+    private bool _isSubmitting = false;
+    private string _errorMessage = "";
+
+    private LoginDto _loginModel = new();
+    private RegisterDto _registerModel = new();
+
+    private void ToggleMode()
+    {
+        _errorMessage = "";
+        IsRegisterMode = !IsRegisterMode;
+    }
+
+    private async Task HandleLogin()
+    {
+        _isSubmitting = true;
+        _errorMessage = "";
+
+        var success = await AuthService.LoginAsync(_loginModel);
+        if (success)
+        {
+            NavigationManager.NavigateTo("products");
+        }
+        else
+        {
+            _errorMessage = "ورود ناموفق بود. لطفاً ایمیل و رمز عبور خود را بررسی کنید.";
+        }
+        _isSubmitting = false;
+    }
+
+    private async Task HandleRegister()
+    {
+        _isSubmitting = true;
+        _errorMessage = "";
+
+        var success = await AuthService.RegisterAsync(_registerModel);
+        if (success)
+        {
+            NavigationManager.NavigateTo("products");
+        }
+        else
+        {
+            _errorMessage = "خطایی در فرآیند ثبت‌نام رخ داد. ممکن است ایمیل تکراری باشد.";
+        }
+        _isSubmitting = false;
+    }
+}
