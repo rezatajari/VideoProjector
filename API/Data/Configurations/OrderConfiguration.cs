@@ -20,7 +20,6 @@ public class OrderConfiguration : BaseEntityConfiguration<Order>
         builder.Property(o => o.IsRental)
                .IsRequired();
 
-        // تنظیم مقدار پیش‌فرض وضعیت سفارش روی Pending (عدد 1) در دیتابیس
         builder.Property(o => o.Status)
                .HasDefaultValue(OrderStatus.Pending)
                .IsRequired();
