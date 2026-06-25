@@ -80,10 +80,20 @@ public class OrdersController(VideoProjectorDbContext context) : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     public async Task<ActionResult<Order>> GetOrderById(int id)
     {
         var order = await context.Orders.FindAsync(id);
-        if (order == null) return NotFound();
+        if (order == null) return NotFound("سفارش مورد نظر یافت نشد.");
+
+        var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var currentUserRole = User.FindFirst(ClaimTypes.Role)?.Value;
+
+        if (currentUserRole != Roles.Admin && order.UserId.ToString() != currentUserId)
+        {
+            return Forbid("شما اجازه مشاهده این سفارش را ندارید.");
+        }
+
         return Ok(order);
     }
 
