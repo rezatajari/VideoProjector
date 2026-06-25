@@ -25,6 +25,7 @@ public class AuthController(VideoProjectorDbContext context, TokenService tokenS
             Email = dto.Email.ToLower(),
             PhoneNumber = dto.PhoneNumber,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password)
+            Role = "Customer" 
         };
 
         context.Users.Add(user);

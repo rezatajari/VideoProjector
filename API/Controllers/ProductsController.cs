@@ -1,4 +1,5 @@
 ﻿using API.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared.Models;
@@ -10,6 +11,7 @@ namespace API.Controllers;
 public class ProductsController(VideoProjectorDbContext context) : ControllerBase
 {
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
     {
         var products = await context.Products
@@ -20,6 +22,7 @@ public class ProductsController(VideoProjectorDbContext context) : ControllerBas
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     public async Task<ActionResult<Product>> GetProduct(int id)
     {
         var product = await context.Products
@@ -35,6 +38,7 @@ public class ProductsController(VideoProjectorDbContext context) : ControllerBas
 
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Product>> CreateProduct(Product product)
     {
         context.Products.Add(product);
@@ -44,6 +48,7 @@ public class ProductsController(VideoProjectorDbContext context) : ControllerBas
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateProduct(int id, Product product)
     {
         if (id != product.Id)
@@ -75,6 +80,7 @@ public class ProductsController(VideoProjectorDbContext context) : ControllerBas
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteProduct(int id)
     {
         var product = await context.Products.FindAsync(id);
