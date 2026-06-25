@@ -67,10 +67,32 @@ else
             </tbody>
         </table>
     </div>
+
+    @if (_isDeleteModalVisible)
+    {
+        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5); direction: rtl; text-align: right;">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-danger text-white py-2">
+                        <h6 class="modal-title fw-bold">⚠️ تایید عملیات حذف</h6>
+                    </div>
+                    <div class="modal-body py-3">
+                        <p class="small text-dark mb-0">آیا از حذف این محصول از لیست انبار اطمینان دارید؟ این عمل قابل بازگشت نیست.</p>
+                    </div>
+                    <div class="modal-footer d-flex gap-2 justify-content-end py-2">
+                        <button type="button" class="btn btn-secondary btn-xs" @onclick="CloseDeleteModal">انصراف</button>
+                        <button type="button" class="btn btn-danger btn-xs px-3" @onclick="ConfirmDeleteProduct">حذف قطعی</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 }
 
 @code {
     private List<Product>? _products;
+    private bool _isDeleteModalVisible = false;
+    private int _productIdToDelete;
 
     protected override async Task OnInitializedAsync()
     {
@@ -94,18 +116,23 @@ else
 
     private async Task DeleteProduct(int id)
     {
-        // یک تاییدیه ساده بومی دات‌نتی بدون نیاز به اسکریپت‌های خارجی
-        // در آینده در صورت نیاز می‌توان با کامپوننت مودال سفارشی جایگزین کرد
-        var confirmed = await Task.FromResult(true); // فرض تایید برای سادگی فعلی MVP
+        _productIdToDelete = id;
+        _isDeleteModalVisible = true;
+    }
 
-        if (confirmed)
+    private void CloseDeleteModal()
+    {
+        _isDeleteModalVisible = false;
+    }
+
+    private async Task ConfirmDeleteProduct()
+    {
+        _isDeleteModalVisible = false; 
+
+        var success = await ProductService.DeleteProductAsync(_productIdToDelete);
+        if (success)
         {
-            var success = await ProductService.DeleteProductAsync(id);
-            if (success)
-            {
-                // ریفرش آنی لیست جدول انبار بعد از حذف موفقیت‌آمیز
-                await LoadProducts();
-            }
+            await LoadProducts();
         }
     }
 }
