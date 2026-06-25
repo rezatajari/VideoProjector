@@ -1,0 +1,166 @@
+﻿@page "/admin/products/create"
+@page "/admin/products/edit/{Id:int}"
+@using Client.Services
+@using Shared.Models
+@inject ProductService ProductService
+@inject NavigationManager NavigationManager
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-dark text-white py-3">
+        <h4 class="m-0 fw-bold">@(IsEditMode ? "✏️ ویرایش اطلاعات محصول" : "➕ افزودن محصول جدید به انبار")</h4>
+    </div>
+    <div class="card-body p-4" style="direction: rtl; text-align: right;">
+
+        @if (_isPageLoading)
+        {
+            <div class="text-center my-4">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-2 text-secondary small">در حال بارگذاری اطلاعات...</p>
+            </div>
+        }
+        else
+        {
+            <EditForm Model="@_product" OnValidSubmit="HandleSubmit">
+                <DataAnnotationsValidator />
+
+                @if (!string.IsNullOrEmpty(_errorMessage))
+                {
+                    <div class="alert alert-danger py-2 small">@_errorMessage</div>
+                }
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label small fw-bold">نام محصول:</label>
+                        <InputText class="form-control" @bind-Value="_product.Name" placeholder="مثلا: ویدئو پروژکتور اپسون مدل X41" />
+                        <ValidationMessage For="@(() => _product.Name)" class="text-danger small" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label small fw-bold">دسته‌بندی کالا:</label>
+                        <InputSelect class="form-select" @bind-Value="_product.Category">
+                            <option value="">انتخاب کنید...</option>
+                            <option value="پروژکتور">ویدئو پروژکتور</option>
+                            <option value="پرده نمایش">پرده نمایش</option>
+                            <option value="لوازم جانبی">لوازم جانبی و کابل</option>
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _product.Category)" class="text-danger small" />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">توضیحات و مشخصات فنی:</label>
+                    <InputTextArea class="form-control" @bind-Value="_product.Description" rows="3" placeholder="شدت روشنایی، پورت‌ها و..." />
+                    <ValidationMessage For="@(() => _product.Description)" class="text-danger small" />
+                </div>
+
+                <hr class="text-muted my-4" />
+                <h5 class="text-secondary mb-3 fw-bold fs-6">💰 تنظیمات مالی و موجودی انبار</h5>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3 border-start">
+                        <div class="bg-light p-3 rounded">
+                            <h6 class="text-danger fw-bold mb-3">🛒 بخش فروش نقدی</h6>
+                            <div class="mb-2">
+                                <label class="form-label small">قیمت فروش قطعی (تومان):</label>
+                                <InputNumber class="form-control" @bind-Value="_product.SalePrice" />
+                            </div>
+                            <div>
+                                <label class="form-label small">موجودی انبار جهت فروش:</label>
+                                <InputNumber class="form-control" @bind-Value="_product.QuantityForSale" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="bg-light p-3 rounded">
+                            <h6 class="text-success fw-bold mb-3">📅 بخش اجاره روزانه</h6>
+                            <div class="mb-2">
+                                <label class="form-label small">هزینه اجاره روزانه (تومان):</label>
+                                <InputNumber class="form-control" @bind-Value="_product.RentalPricePerDay" />
+                            </div>
+                            <div>
+                                <label class="form-label small">تعداد دستگاه مجاز برای اجاره:</label>
+                                <InputNumber class="form-control" @bind-Value="_product.QuantityForRental" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-end mt-4 border-top pt-3">
+                    <button type="button" class="btn btn-secondary btn-sm px-4" @onclick="Cancel">انصراف و بازگشت</button>
+                    <button type="submit" class="btn btn-success btn-sm px-4" disabled="@_isSubmitting">
+                        @if (_isSubmitting)
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status"></span>
+                        }
+                        else
+                        {
+                            <span>@(IsEditMode ? "ذخیره تغییرات" : "ثبت محصول جدید")</span>
+                        }
+                    </button>
+                </div>
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public int? Id { get; set; }
+
+    private Product _product = new();
+    private bool IsEditMode => Id.HasValue && Id.Value > 0;
+    private bool _isPageLoading = false;
+    private bool _isSubmitting = false;
+    private string _errorMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (IsEditMode)
+        {
+            _isPageLoading = true;
+            var loadedProduct = await ProductService.GetProductByIdAsync(Id!.Value);
+
+            if (loadedProduct != null)
+            {
+                _product = loadedProduct;
+            }
+            else
+            {
+                _errorMessage = "محصول مورد نظر جهت ویرایش یافت نشد.";
+            }
+            _isPageLoading = false;
+        }
+    }
+
+    private async Task HandleSubmit()
+    {
+        _isSubmitting = true;
+        _errorMessage = "";
+        HttpResponseMessage response;
+
+        if (IsEditMode)
+        {
+            response = await ProductService.UpdateProductAsync(Id!.Value, _product);
+        }
+        else
+        {
+            response = await ProductService.CreateProductAsync(_product);
+        }
+
+        if (response.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("admin/products");
+        }
+        else
+        {
+            _errorMessage = await response.Content.ReadAsStringAsync();
+        }
+
+        _isSubmitting = false;
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("admin/products");
+    }
+}
