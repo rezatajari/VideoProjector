@@ -48,27 +48,45 @@ public class CustomAuthStateProvider(HttpClient http, IJSRuntime jsRuntime) : Au
 
         if (keyValuePairs != null)
         {
-            keyValuePairs.TryGetValue(ClaimTypes.Role, out object? roles);
-
-            if (roles != null)
+            // ۱. بررسی هر دو مدل کلید احتمالی برای نقش (متن کوتاه یا آدرس استاندارد مایکروسافت)
+            if (keyValuePairs.TryGetValue("role", out var roles) ||
+                keyValuePairs.TryGetValue(ClaimTypes.Role, out roles))
             {
-                if (roles.ToString()!.Trim().StartsWith('['))
+                if (roles != null)
                 {
-                    var parsedRoles = JsonSerializer.Deserialize<string[]>(roles.ToString()!);
-                    foreach (var parsedRole in parsedRoles!)
+                    var rolesString = roles.ToString()!.Trim();
+
+                    // اگر کاربر چند نقش داشته باشد (به صورت آرایه [ "Admin", "User" ])
+                    if (rolesString.StartsWith('['))
                     {
-                        claims.Add(new Claim(ClaimTypes.Role, parsedRole));
+                        var parsedRoles = JsonSerializer.Deserialize<string[]>(rolesString);
+                        foreach (var parsedRole in parsedRoles!)
+                        {
+                            claims.Add(new Claim(ClaimTypes.Role, parsedRole));
+                        }
+                    }
+                    else
+                    {
+                        // اگر کاربر فقط یک نقش داشته باشد (به صورت رشته معمولی)
+                        claims.Add(new Claim(ClaimTypes.Role, rolesString));
                     }
                 }
-                else
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, roles.ToString()!));
-                }
 
+                // حذف کلیدهای خام قبلی برای جلوگیری از تکرار
+                keyValuePairs.Remove("role");
                 keyValuePairs.Remove(ClaimTypes.Role);
             }
 
-            claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()!)));
+            // ۲. استخراج بقیه کلیم‌ها مثل نام کاربری و ایمیل
+            claims.AddRange(keyValuePairs.Select(kvp => {
+                // یکسان‌سازی کلید نام کاربری برای بومی‌سازی دات‌نت
+                if (kvp.Key == "unique_name" || kvp.Key == "name")
+                    return new Claim(ClaimTypes.Name, kvp.Value.ToString()!);
+                if (kvp.Key == "sub" || kvp.Key == "nameid")
+                    return new Claim(ClaimTypes.NameIdentifier, kvp.Value.ToString()!);
+
+                return new Claim(kvp.Key, kvp.Value.ToString()!);
+            }));
         }
 
         return claims;
