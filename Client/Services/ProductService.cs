@@ -1,17 +1,34 @@
-﻿using Shared.Models;
+﻿using Microsoft.JSInterop;
+using Shared.Models;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using static System.Net.WebRequestMethods;
 
 namespace Client.Services;
 
-public class ProductService(HttpClient http)
+public class ProductService(HttpClient http, IJSRuntime jsRuntime)
 {
     public async Task<List<Product>> GetProductsAsync()
     {
-        var products = await http.GetFromJsonAsync<List<Product>>("api/products");
-        return products ?? [];
-    }
+        var request = new HttpRequestMessage(HttpMethod.Get, "api/products");
 
+        var token = await jsRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+        if (!string.IsNullOrEmpty(token))
+        {
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+
+        var response = await http.SendAsync(request);
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            return new List<Product>();
+        }
+
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadFromJsonAsync<List<Product>>() ?? new List<Product>();
+    }
     public async Task<Product?> GetProductByIdAsync(int id)
     {
         return await http.GetFromJsonAsync<Product>($"api/products/{id}");
