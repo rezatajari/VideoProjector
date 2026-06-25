@@ -1,4 +1,5 @@
 ﻿@page "/products"
+@using Client.Components
 @using Client.Services
 @using Shared.Models
 @inject ProductService ProductService
@@ -70,6 +71,10 @@ else
         }
     </div>
 }
+<OrderModal IsVisible="_isModalVisible" 
+            SelectedProduct="_selectedProduct" 
+            IsRental="_isRentalAction" 
+            OnClose="CloseOrderModal" />
 
 @code {
     private List<Product>? _products;
