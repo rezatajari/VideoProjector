@@ -13,7 +13,7 @@ public class ProductConfiguration : BaseEntityConfiguration<Product>
         builder.Property(p => p.Name)
                .HasMaxLength(150)
                .IsRequired();
-
+        
         builder.Property(p => p.Category)
                .HasMaxLength(50)
                .IsRequired();
@@ -28,7 +28,6 @@ public class ProductConfiguration : BaseEntityConfiguration<Product>
                .HasDefaultValue(0)
                .IsRequired();
 
-        // تنظیمات بخش اجاره
         builder.Property(p => p.RentalPricePerDay)
                .HasColumnType("decimal(18,2)");
 
