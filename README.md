@@ -1,4 +1,4 @@
-# 📹 Smart Video Projector Rental & Sales Management System (ProjectorRental)
+# Video Projector Rental & Sales Management System
 
 A modern, distributed, and object-oriented platform designed for managing, purchasing, and daily renting of video projectors and accessories. Built with a robust client-server architecture and advanced role-based security.
 
@@ -18,9 +18,13 @@ A modern, distributed, and object-oriented platform designed for managing, purch
 
 Explore the user interface and features developed across different modules of the application:
 
-### 📊 Admin Dashboard
+### Admin Dashboard
 A comprehensive panel for monitoring incoming orders, rental cycles, and overall inventory status.
 ![Admin Dashboard](images/AdminDashboard.png)
+
+### Interactive API Documentation (Swagger)
+Swagger documentations APIs
+![Swagger Document](images/SwaggerDocument.png)
 
 ### User & Access Management
 Dedicated module for separating and managing system users based on organizational roles.
@@ -33,10 +37,6 @@ A dynamic storefront displaying available equipment, distinct options for daily 
 ### Product Management Form
 An intuitive interface allowing administrators to register new projectors complete with specific categories, pricing, stock levels, images, and quality test video URLs.
 ![Add Product](images/AddProduct.png)
-
-### Interactive API Documentation (Swagger)
-100% coverage of secure system endpoints, allowing real-time testing using JWT Authorize payloads.
-![Swagger Document](images/SwaggerDocument.png)
 
 ---
 
