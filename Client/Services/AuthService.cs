@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using Shared.DTOs;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace Client.Services;
@@ -30,7 +31,7 @@ public class AuthService(HttpClient http, IJSRuntime jsRuntime, AuthenticationSt
 
         var token = await response.Content.ReadAsStringAsync();
         await _js.InvokeVoidAsync("localStorage.setItem", "authToken", token);
-
+        http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         _authStateProvider.NotifyUserAuthentication(token);
 
         return true;

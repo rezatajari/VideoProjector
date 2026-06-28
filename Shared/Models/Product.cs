@@ -13,4 +13,7 @@ public class Product : BaseEntity
     // بخش مربوط به اجاره (اگر نال باشند یعنی کالا اجاره‌ای نیست)
     public decimal? RentalPricePerDay { get; set; }
     public int QuantityForRental { get; set; }
+
+    public string ImageUrl { get; set; } = "/images/default-projector.png"; // عکس پیش‌فرض
+    public string? TestVideoUrl { get; set; }
 }
