@@ -18,13 +18,13 @@ A modern, distributed, and object-oriented platform designed for managing, purch
 
 Explore the user interface and features developed across different modules of the application:
 
-### Admin Dashboard
-A comprehensive panel for monitoring incoming orders, rental cycles, and overall inventory status.
-![Admin Dashboard](images/AdminDashboard.png)
-
 ### Interactive API Documentation (Swagger)
 Swagger documentations APIs
 ![Swagger Document](images/SwaggerDocument.png)
+
+### Admin Dashboard
+A comprehensive panel for monitoring incoming orders, rental cycles, and overall inventory status.
+![Admin Dashboard](images/AdminDashboard.png)
 
 ### User & Access Management
 Dedicated module for separating and managing system users based on organizational roles.
