@@ -46,7 +46,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<TokenService>();
 
 var app = builder.Build();
-
+app.UseStaticFiles();
 app.UseRouting();
 app.UseCors("BlazorWasmPolicy");
 

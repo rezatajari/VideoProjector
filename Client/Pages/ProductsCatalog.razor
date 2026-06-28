@@ -5,7 +5,7 @@
 @using Shared.Models
 @inject ProductService ProductService
 @attribute [Authorize]
-
+@inject IConfiguration Config
 
 <h3 class="mb-4 text-dark border-bottom pb-2">🛍️ کاتالوگ و ویترین محصولات</h3>
 
@@ -29,11 +29,22 @@ else
         @foreach (var product in _products)
         {
             <div class="col">
-                <div class="card h-100 shadow-sm border-0">
+                <div class="card h-100 shadow-sm border-0 position-relative">
+
+                    <img src="@GetFullImageUrl(product.ImageUrl)" class="card-img-top" alt="@product.Name" style="height: 200px; object-fit: cover;">
                     <div class="card-body d-flex flex-column">
                         <span class="badge bg-secondary mb-2 align-self-start">@product.Category</span>
                         <h5 class="card-title fw-bold text-primary">@product.Name</h5>
                         <p class="card-text text-muted small flex-grow-1">@product.Description</p>
+
+                        @if (!string.IsNullOrEmpty(product.TestVideoUrl))
+                        {
+                            <div class="mb-3">
+                                <a href="@product.TestVideoUrl" target="_blank" class="btn btn-outline-danger btn-sm w-100">
+                                    📺 مشاهده فیلم تست کیفیت دستگاه
+                                </a>
+                            </div>
+                        }
 
                         <hr class="text-muted" />
 
@@ -109,5 +120,18 @@ else
         _isModalVisible = false;
         // ریفرش کردن کاتالوگ برای به‌روزرسانی موجودی‌های جدید انبار بعد از خرید/اجاره
         _products = await ProductService.GetProductsAsync();
+    }
+
+    private string GetFullImageUrl(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            path = "/images/default-projector.png"; // اگر دیتابیس خالی بود
+
+        if (path.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            return path;
+
+        // خواندن آدرس بیس بک‌اَند از کانفیگ و چسباندن آن به مسیر عکس
+        var baseAddress = Config["BaseAddress"]?.TrimEnd('/');
+        return $"{baseAddress}/{path.TrimStart('/')}";
     }
 }
