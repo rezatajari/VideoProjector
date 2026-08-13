@@ -14,7 +14,9 @@ public sealed class Product:BaseEntity
     public int QuantityForSale { get; private set; }
     public Money RentalPricePerDay { get; private set; }
     public int QuantityForRental { get; private set; }
-    
+    public string ImageUrl { get;private set; } = "/images/default-projector.png"; 
+    public string? TestVideoUrl { get;private set; }
+
     
     private Product(
         ProductName productName,
@@ -22,7 +24,10 @@ public sealed class Product:BaseEntity
         Money? salePrice,
         int quantityForSale,
         Money rentalPricePerDay,
-        int quantityForRental
+        int quantityForRental,
+        string imageUrl,
+        string? testVideoUrl
+        
     )
     {
         ProductName = productName;  
@@ -31,6 +36,8 @@ public sealed class Product:BaseEntity
         QuantityForSale = quantityForSale;
         RentalPricePerDay = rentalPricePerDay;
         QuantityForRental = quantityForRental;
+        ImageUrl = imageUrl;
+        TestVideoUrl = testVideoUrl;
     }
 
     public static Product Create(
@@ -39,7 +46,9 @@ public sealed class Product:BaseEntity
         Money? salePrice,
         int quantityForSale,
         Money rentalPricePerDay,
-        int quantityForRental
+        int quantityForRental,
+        string imageUrl,
+        string? testVideoUrl
         )
     {
         return new Product(
@@ -48,9 +57,12 @@ public sealed class Product:BaseEntity
             salePrice,
             quantityForSale,
             rentalPricePerDay,
-            quantityForRental);
+            quantityForRental,
+            imageUrl,
+            testVideoUrl);
     }
 
+    
     public void AssignCategory(Guid categoryId)
     {
         if (categoryId==Guid.Empty)
