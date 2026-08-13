@@ -74,4 +74,13 @@ public sealed class Product:BaseEntity
         SalePrice = null;
         QuantityForSale = 0;
     }
+
+    public void EnableForRental(Money rentalPricePerDay, int quantity)
+    {
+        if (quantity<=0)
+            throw new InvalidQuantityException("Quantity must be greater than zero");
+        
+        RentalPricePerDay = rentalPricePerDay;
+        QuantityForRental = quantity;
+    }
 }
