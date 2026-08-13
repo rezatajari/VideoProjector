@@ -5,9 +5,9 @@ namespace Domain.Products;
 
 public sealed class Product:BaseEntity
 {
-    public Guid CategoryId { get; init; }
-    public Name Name { get; private init; } =new Name(string.Empty);
-    public Description? Description { get; private init; }
+    public ProductName ProductName { get; private set; } = new ProductName(string.Empty);
+    public Description? ProductDescription { get; private set; }
+    
     
     
     public ICollection<Category>  Categories { get; private init; } = new HashSet<Category>();
