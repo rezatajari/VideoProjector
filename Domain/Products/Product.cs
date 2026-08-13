@@ -1,5 +1,6 @@
 ﻿using Domain.Abstractions;
 using Domain.Categories.Exceptions;
+using Domain.Products.Exceptions;
 using Domain.Products.ValueObjects;
 using Domain.Shared;
 
@@ -57,5 +58,20 @@ public sealed class Product:BaseEntity
     public void RemoveCategory()
     {
         CategoryId = null;
+    }
+
+    public void EnableForSale(Money salePrice, int quantity)
+    {
+        if (quantity<=0)
+            throw new InvalidQuantityException("Quantity must be greater than zero");
+        
+        SalePrice = salePrice;
+        QuantityForSale = quantity;
+    }
+
+    public void DisableForSale()
+    {
+        SalePrice = null;
+        QuantityForSale = 0;
     }
 }

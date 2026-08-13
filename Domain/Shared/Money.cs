@@ -16,7 +16,7 @@ public sealed record Money
         Amount = amount;
         Currency = currency;
     }
-
+    
     public static Money operator+(Money left, Money right)
     {
         if (left.Currency != right.Currency)
