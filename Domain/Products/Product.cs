@@ -21,10 +21,6 @@ public sealed class Product:BaseEntity
     private Product(
         ProductName productName,
         ProductDescription? productDescription,
-        Money? salePrice,
-        int quantityForSale,
-        Money rentalPricePerDay,
-        int quantityForRental,
         string imageUrl,
         string? testVideoUrl
         
@@ -32,10 +28,6 @@ public sealed class Product:BaseEntity
     {
         ProductName = productName;  
         ProductDescription = productDescription;
-        SalePrice = salePrice;
-        QuantityForSale = quantityForSale;
-        RentalPricePerDay = rentalPricePerDay;
-        QuantityForRental = quantityForRental;
         ImageUrl = imageUrl;
         TestVideoUrl = testVideoUrl;
     }
@@ -43,10 +35,6 @@ public sealed class Product:BaseEntity
     public static Product Create(
         ProductName productName,
         ProductDescription? productDescription,
-        Money? salePrice,
-        int quantityForSale,
-        Money rentalPricePerDay,
-        int quantityForRental,
         string imageUrl,
         string? testVideoUrl
         )
@@ -54,10 +42,6 @@ public sealed class Product:BaseEntity
         return new Product(
             productName,
             productDescription,
-            salePrice,
-            quantityForSale,
-            rentalPricePerDay,
-            quantityForRental,
             imageUrl,
             testVideoUrl);
     }
