@@ -2,6 +2,7 @@
 using Domain.Categories;
 using Domain.Categories.Exceptions;
 using Domain.Products.ValueObjects;
+using Domain.Shared;
 
 namespace Domain.Products;
 
@@ -10,8 +11,10 @@ public sealed class Product:BaseEntity
     public Guid? CategoryId  { get;private set; }
     public ProductName ProductName { get; private set; } 
     public ProductDescription? ProductDescription { get; private set; }
-    
-    
+    public Money? SalePrice { get; private set; }
+    public int QuantityForSale { get; private set; }
+    public Money RentalPricePerDay { get; private set; }
+    public int QuantityForRental { get; private set; }
     private Product(ProductName productName, ProductDescription? productDescription)
     {
         ProductName = productName;  
@@ -33,5 +36,18 @@ public sealed class Product:BaseEntity
     public void RemoveCategory()
     {
         CategoryId = null;
+    }
+
+    public bool EnableForSale(Money price, int quantity)
+    {
+        if (quantity <= 0) return false;
+        if (QuantityForSale < quantity) return false;
+        return SalePrice == price;
+    }
+    
+    public void DisableSale()
+    {
+        QuantityForSale = 0;
+        SalePrice = null;
     }
 }

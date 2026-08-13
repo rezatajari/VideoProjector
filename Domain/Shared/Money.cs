@@ -10,13 +10,13 @@ public sealed record Money
 
     public Money(decimal amount, Currency currency)
     {
-        if (amount <= 0)
+        if (amount < 0)
             throw new InvalidMoneyAmountException("Amount must be greater than zero");
         
         Amount = amount;
         Currency = currency;
     }
-    
+
     public static Money operator+(Money left, Money right)
     {
         if (left.Currency != right.Currency)
