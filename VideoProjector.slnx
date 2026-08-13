@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="API/API.csproj" Id="5a91d0cf-976c-4da5-806b-d73e5e800b50" />
   <Project Path="Client/Client.csproj" Id="3a48ab0e-a524-4081-8928-f3476155b73e" />
+  <Project Path="Domain/Domain.csproj" />
   <Project Path="Shared/Shared.csproj" Id="dc3fe2b0-4984-4e38-baae-e1e231149d6c" />
 </Solution>
