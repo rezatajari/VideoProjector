@@ -24,7 +24,6 @@ public sealed class Product:BaseEntity
         ProductDescription? productDescription,
         string imageUrl,
         string? testVideoUrl
-        
     )
     {
         ProductName = productName;  
