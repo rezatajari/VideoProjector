@@ -14,15 +14,41 @@ public sealed class Product:BaseEntity
     public int QuantityForSale { get; private set; }
     public Money RentalPricePerDay { get; private set; }
     public int QuantityForRental { get; private set; }
-    private Product(ProductName productName, ProductDescription? productDescription)
+    
+    
+    private Product(
+        ProductName productName,
+        ProductDescription? productDescription,
+        Money? salePrice,
+        int quantityForSale,
+        Money rentalPricePerDay,
+        int quantityForRental
+    )
     {
         ProductName = productName;  
         ProductDescription = productDescription;
+        SalePrice = salePrice;
+        QuantityForSale = quantityForSale;
+        RentalPricePerDay = rentalPricePerDay;
+        QuantityForRental = quantityForRental;
     }
 
-    public static Product Create(ProductName productName, ProductDescription? productDescription)
+    public static Product Create(
+        ProductName productName,
+        ProductDescription? productDescription,
+        Money? salePrice,
+        int quantityForSale,
+        Money rentalPricePerDay,
+        int quantityForRental
+        )
     {
-        return new Product(productName, productDescription);
+        return new Product(
+            productName,
+            productDescription,
+            salePrice,
+            quantityForSale,
+            rentalPricePerDay,
+            quantityForRental);
     }
 
     public void AssignCategory(Guid categoryId)
