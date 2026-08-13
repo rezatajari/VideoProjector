@@ -1,5 +1,4 @@
 ﻿using Domain.Abstractions;
-using Domain.Categories;
 using Domain.Categories.Exceptions;
 using Domain.Products.ValueObjects;
 using Domain.Shared;
@@ -36,18 +35,5 @@ public sealed class Product:BaseEntity
     public void RemoveCategory()
     {
         CategoryId = null;
-    }
-
-    public bool EnableForSale(Money price, int quantity)
-    {
-        if (quantity <= 0) return false;
-        if (QuantityForSale < quantity) return false;
-        return SalePrice == price;
-    }
-    
-    public void DisableSale()
-    {
-        QuantityForSale = 0;
-        SalePrice = null;
     }
 }
