@@ -9,11 +9,9 @@ public sealed record ProductDescription
 
     public ProductDescription(string? value)
     {
-        if (string.IsNullOrWhiteSpace(value)){
-            Value = string.Empty;
+        if (string.IsNullOrWhiteSpace(value))
             return;   
-        }
-
+        
         string normalizedValue = value.Trim();
         if (normalizedValue.Length > MaxLength)
             throw new InvalidProductDescriptionException($"Value is too long. Maximum length is {MaxLength}");
