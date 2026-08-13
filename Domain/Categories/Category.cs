@@ -2,7 +2,7 @@
 
 namespace Domain.Categories;
 
-public class Category:BaseEntity
+public sealed class Category:BaseEntity
 {
-    
+    public CategoryName CategoryName { get;private set; }
 }
