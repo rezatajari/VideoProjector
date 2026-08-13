@@ -1,6 +1,9 @@
-﻿namespace Domain.Products;
+﻿using Domain.Abstractions;
 
-public class Product
+namespace Domain.Products;
+
+public sealed class Product:BaseEntity
 {
-    
+    public Name Name { get; private init; } =new Name(string.Empty);
+    public Description? Description { get; private init; }
 }
