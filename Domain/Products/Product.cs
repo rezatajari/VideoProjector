@@ -30,7 +30,7 @@ public sealed class Product:BaseEntity
         CategoryId = categoryId;
     }
 
-    public void RemoveCategory(Guid categoryId)
+    public void RemoveCategory()
     {
         CategoryId = null;
     }
