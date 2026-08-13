@@ -1,6 +1,6 @@
 ﻿using Domain.Products.Exceptions;
 
-namespace Domain.Products;
+namespace Domain.Products.ValueObjects;
 
 public sealed record ProductName
 {
@@ -23,7 +23,7 @@ public sealed record ProductName
                 "Product name cannot be longer than " + MaxLength + " characters.");
         }
         
-        Value = value;
+        Value = normalizedValue;
     }
     
 }
