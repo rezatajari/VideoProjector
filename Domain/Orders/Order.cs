@@ -1,6 +1,7 @@
 ﻿using Domain.Abstractions;
 using Domain.Orders.Enums;
 using Domain.Orders.Exceptions;
+using Domain.Products.Exceptions;
 using Domain.Shared;
 
 namespace Domain.Orders;
@@ -35,10 +36,17 @@ public sealed class Order : BaseEntity
         int quantity,
         Money pricePerUnitForPerDay)
     {
-        if (duration.LenghInDays <= 1)
+        if (duration.NumberOfDays < 1 || duration ==null)
             throw new InvalidDateRangeException("Rental duration must be greater than or equal to 1.");
 
-        Money totalPrice = pricePerUnitForPerDay * quantity * duration.LenghInDays;
+        if (userId==Guid.Empty || productId==Guid.Empty)
+            throw new ArgumentException("User ID or Product ID cannot be empty.");
+        if (quantity <=0)
+            throw new InvalidQuantityException("Quantity must be greater than or equal to 0.");
+        if (pricePerUnitForPerDay==null)
+            throw new ArgumentException("Price per Unit For Per Day cannot be null.");
+        
+        Money totalPrice = pricePerUnitForPerDay * quantity * duration.NumberOfDays;
         Order order = new Order(userId, productId, quantity, pricePerUnitForPerDay, totalPrice, duration);
 
         return order;
@@ -46,6 +54,13 @@ public sealed class Order : BaseEntity
 
     public static Order CreateForSale(Guid userId, Guid productId, int quantity, Money pricePerUnit)
     {
+        if (userId==Guid.Empty || productId==Guid.Empty)
+            throw new ArgumentException("User ID or Product ID cannot be empty.");
+        if (quantity <=0)
+            throw new InvalidQuantityException("Quantity must be greater than or equal to 0.");
+        if (pricePerUnit==null)
+            throw new ArgumentException("Price per Unit cannot be null.");
+        
         Money totalPrice = pricePerUnit * quantity;
         Order order = new Order(userId, productId, quantity, pricePerUnit, totalPrice);
         return order;

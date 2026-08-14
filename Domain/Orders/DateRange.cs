@@ -6,7 +6,7 @@ public sealed record DateRange
 {
     public DateOnly Start { get; }
     public DateOnly End { get; }
-    public int LenghInDays { get; }
+    public int NumberOfDays { get; }
 
     public DateRange(DateOnly startDate, DateOnly endDate)
     {
@@ -15,6 +15,6 @@ public sealed record DateRange
 
         Start = startDate;
         End = endDate;
-        LenghInDays = End.DayNumber - Start.DayNumber;
+        NumberOfDays = End.DayNumber - Start.DayNumber;
     }
 }
