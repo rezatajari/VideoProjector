@@ -2,7 +2,7 @@
 
 namespace Domain.Users.ValueObjects;
 
-public record class FullName
+public sealed record FullName
 {
     private const int MaxLength = 100;
     

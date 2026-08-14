@@ -6,35 +6,33 @@ namespace Domain.Users;
 
 public sealed class User:BaseEntity
 {
+    private readonly List<Role> _roles = [];
     public FullName FullName { get; private set; }
     public Email Email { get;private set; }
     public PasswordHash PasswordHash { get; private set; }
     public PhoneNumber? PhoneNumber { get; private set; }
-    public List<Role> Roles { get; private set; }
+    public ICollection<Role> Roles => _roles.AsReadOnly();
 
 
     private User(
         FullName fullName, 
         Email email,
         PasswordHash passwordHash, 
-        PhoneNumber? phoneNumber,
-        List<Role> roles)
+        PhoneNumber? phoneNumber)
     {
         FullName = fullName;
         Email = email;
         PasswordHash = passwordHash;
         PhoneNumber = phoneNumber;
-        Roles = roles;
     }
 
     public static User Create(
         FullName fullName,
         Email email,
         PasswordHash passwordHash,
-        PhoneNumber? phoneNumber,
-        List<Role> roles)
+        PhoneNumber? phoneNumber)
     {
-        User user = new User(fullName, email, passwordHash, phoneNumber,roles);
+        User user = new User(fullName, email, passwordHash, phoneNumber);
         return user;
     }
     
