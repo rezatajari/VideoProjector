@@ -20,10 +20,6 @@ public sealed class Order : BaseEntity
         Status = OrderStatus.Pending;
     }
 
-    private Order()
-    {
-    }
-
     public static Order Create(Guid userId)
     {
         if (userId == Guid.Empty)
