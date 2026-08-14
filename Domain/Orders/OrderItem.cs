@@ -42,10 +42,6 @@ public sealed class OrderItem : BaseEntity
         LineTotal = CalculateLineTotal(unitPrice, quantity, duration);
     }
 
-    private OrderItem()
-    {
-    }
-
     internal static OrderItem CreateForSale(
         Guid orderId,
         Guid productId,
