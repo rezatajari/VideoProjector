@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using Domain.Users.ValueObjects;
 
 namespace Domain.Users;
 
