@@ -7,9 +7,9 @@ namespace Domain.Users;
 public sealed class User:BaseEntity
 {
     public FullName FullName { get; private set; }
-    public Email Eamil { get;private set; }
+    public Email Email { get;private set; }
     public PasswordHash PasswordHash { get; private set; }
-    public PhoneNumber PhoneNumber { get; private set; }
+    public PhoneNumber? PhoneNumber { get; private set; }
     public List<Role> Roles { get; private set; }
 
 
@@ -17,11 +17,11 @@ public sealed class User:BaseEntity
         FullName fullName, 
         Email email,
         PasswordHash passwordHash, 
-        PhoneNumber phoneNumber,
+        PhoneNumber? phoneNumber,
         List<Role> roles)
     {
         FullName = fullName;
-        Eamil = email;
+        Email = email;
         PasswordHash = passwordHash;
         PhoneNumber = phoneNumber;
         Roles = roles;
@@ -31,10 +31,11 @@ public sealed class User:BaseEntity
         FullName fullName,
         Email email,
         PasswordHash passwordHash,
-        PhoneNumber phoneNumber,
+        PhoneNumber? phoneNumber,
         List<Role> roles)
     {
         User user = new User(fullName, email, passwordHash, phoneNumber,roles);
+        return user;
     }
     
 }
