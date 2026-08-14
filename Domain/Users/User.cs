@@ -18,13 +18,13 @@ public sealed class User:BaseEntity
         Email email,
         PasswordHash passwordHash, 
         PhoneNumber phoneNumber,
-        Guid roleId)
+        List<Role> roles)
     {
         FullName = fullName;
         Eamil = email;
         PasswordHash = passwordHash;
         PhoneNumber = phoneNumber;
-        RoleId = roleId;
+        Roles = roles;
     }
 
     public static User Create(
@@ -32,9 +32,9 @@ public sealed class User:BaseEntity
         Email email,
         PasswordHash passwordHash,
         PhoneNumber phoneNumber,
-        Guid roleId)
+        List<Role> roles)
     {
-        User user = new User(fullName, email, passwordHash, phoneNumber,roleId);
+        User user = new User(fullName, email, passwordHash, phoneNumber,roles);
     }
     
 }
