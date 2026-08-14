@@ -15,6 +15,6 @@ public sealed record DateRange
 
         Start = startDate;
         End = endDate;
-        NumberOfDays = End.DayNumber - Start.DayNumber;
+        NumberOfDays = Math.Max(1, End.DayNumber - Start.DayNumber);
     }
 }

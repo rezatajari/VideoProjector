@@ -1,7 +1,6 @@
 ﻿using Domain.Abstractions;
 using Domain.Orders.Enums;
 using Domain.Orders.Exceptions;
-using Domain.Products.Exceptions;
 using Domain.Shared;
 
 namespace Domain.Orders;
@@ -15,10 +14,15 @@ public sealed class Order : BaseEntity
     public Money PricePerUnit { get; private set; }
     public Money TotalPrice { get; private set; }
     public OrderStatus Status { get; private set; }
+    public bool IsRental => Duration is not null;
 
 
-    private Order(Guid userId, Guid productId, int quantity, Money pricePerUnit, Money totalPrice,
-        DateRange? duration = default)
+    private Order(
+        Guid userId,
+        Guid productId,
+        int quantity,
+        Money pricePerUnit,
+        DateRange? duration = null)
     {
         Status = OrderStatus.Pending;
         UserId = userId;
@@ -26,7 +30,9 @@ public sealed class Order : BaseEntity
         Duration = duration;
         Quantity = quantity;
         PricePerUnit = pricePerUnit;
-        TotalPrice = totalPrice;
+        TotalPrice = duration is null
+            ? pricePerUnit * quantity
+            : pricePerUnit * quantity * duration.NumberOfDays;
     }
 
     public static Order CreateForRental(
@@ -34,57 +40,77 @@ public sealed class Order : BaseEntity
         Guid productId,
         DateRange duration,
         int quantity,
-        Money pricePerUnitForPerDay)
+        Money pricePerUnitPerDay)
     {
-        
         ArgumentNullException.ThrowIfNull(duration);
-        if (duration.NumberOfDays <= 1)
-            throw new InvalidDateRangeException("Rental duration must be greater than or equal to 1.");
+        ValidateCreationArguments(userId, productId, quantity, pricePerUnitPerDay);
 
-        if (userId == Guid.Empty || productId == Guid.Empty)
-            throw new ArgumentException("User ID or Product ID cannot be empty.");
-        if (quantity <= 0)
-            throw new InvalidQuantityException("Quantity must be greater than zero");
-        ArgumentNullException.ThrowIfNull(pricePerUnitForPerDay);
-
-        Money totalPrice = pricePerUnitForPerDay * quantity * duration.NumberOfDays;
-        Order order = new Order(userId, productId, quantity, pricePerUnitForPerDay, totalPrice, duration);
-
-        return order;
+        return new Order(userId, productId, quantity, pricePerUnitPerDay, duration);
     }
 
     public static Order CreateForSale(Guid userId, Guid productId, int quantity, Money pricePerUnit)
     {
-        if (userId == Guid.Empty || productId == Guid.Empty)
-            throw new ArgumentException("User ID or Product ID cannot be empty.");
-        if (quantity <= 0)
-            throw new InvalidQuantityException("Quantity must be greater than zero");
-        if (pricePerUnit == null)
-            throw new ArgumentException("Price per Unit cannot be null.");
+        ValidateCreationArguments(userId, productId, quantity, pricePerUnit);
 
-        Money totalPrice = pricePerUnit * quantity;
-        Order order = new Order(userId, productId, quantity, pricePerUnit, totalPrice);
-        return order;
+        return new Order(userId, productId, quantity, pricePerUnit);
     }
-
 
     public void Confirm()
     {
+        EnsureStatus(OrderStatus.Pending, OrderStatus.Confirmed);
         Status = OrderStatus.Confirmed;
     }
 
     public void Cancel()
     {
+        if (Status is not OrderStatus.Pending and not OrderStatus.Confirmed)
+            throw InvalidTransitionTo(OrderStatus.Canceled);
+
         Status = OrderStatus.Canceled;
     }
 
     public void MarkDelivered()
     {
+        EnsureStatus(OrderStatus.Confirmed, OrderStatus.Delivered);
         Status = OrderStatus.Delivered;
     }
 
     public void Complete()
     {
+        EnsureStatus(OrderStatus.Delivered, OrderStatus.Completed);
         Status = OrderStatus.Completed;
+    }
+
+    private static void ValidateCreationArguments(
+        Guid userId,
+        Guid productId,
+        int quantity,
+        Money pricePerUnit)
+    {
+        if (userId == Guid.Empty)
+            throw new ArgumentException("User ID cannot be empty.", nameof(userId));
+
+        if (productId == Guid.Empty)
+            throw new ArgumentException("Product ID cannot be empty.", nameof(productId));
+
+        if (quantity <= 0)
+            throw new InvalidOrderQuantityException("Order quantity must be greater than zero.");
+
+        ArgumentNullException.ThrowIfNull(pricePerUnit);
+
+        if (pricePerUnit.Amount <= 0)
+            throw new InvalidOrderPriceException("Order price must be greater than zero.");
+    }
+
+    private void EnsureStatus(OrderStatus requiredStatus, OrderStatus targetStatus)
+    {
+        if (Status != requiredStatus)
+            throw InvalidTransitionTo(targetStatus);
+    }
+
+    private InvalidOrderStatusTransitionException InvalidTransitionTo(OrderStatus targetStatus)
+    {
+        return new InvalidOrderStatusTransitionException(
+            $"Order cannot transition from {Status} to {targetStatus}.");
     }
 }
