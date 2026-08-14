@@ -62,8 +62,10 @@ public sealed class Product:BaseEntity
     public void EnableForSale(Money salePrice, int quantity)
     {
         if (quantity<=0)
-            throw new InvalidQuantityException("Quantity must be greater than zero");
+            throw new InvalidQuantityException("Quantity cannot be negative.");
         
+        ArgumentNullException.ThrowIfNull(salePrice);
+
         SalePrice = salePrice;
         QuantityForSale = quantity;
     }
@@ -77,8 +79,10 @@ public sealed class Product:BaseEntity
     public void EnableForRental(Money rentalPricePerDay, int quantity)
     {
         if (quantity<=0)
-            throw new InvalidQuantityException("Quantity must be greater than zero");
+            throw new InvalidQuantityException("Quantity cannot be negative.");
         
+        ArgumentNullException.ThrowIfNull(rentalPricePerDay);
+
         RentalPricePerDay = rentalPricePerDay;
         QuantityForRental = quantity;
     }
