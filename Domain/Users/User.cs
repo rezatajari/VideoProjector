@@ -12,7 +12,7 @@ public sealed class User:BaseEntity
     public Email Email { get;private set; }
     public PasswordHash PasswordHash { get; private set; }
     public PhoneNumber? PhoneNumber { get; private set; }
-    public ICollection<Guid> RolesId => _rolesId.AsReadOnly();
+    public IReadOnlyCollection<Guid> RolesId => _rolesId.AsReadOnly();
 
 
     private User(
@@ -40,7 +40,7 @@ public sealed class User:BaseEntity
     public void AddRole(Guid roleId)
     {
         if (roleId == Guid.Empty)
-            throw new InvalidRoleException("Role is null.");
+            throw new InvalidRoleException("Role ID cannot be empty,");
                 
         bool isRoleExist=_rolesId.Any(r => r == roleId);
         
@@ -53,7 +53,7 @@ public sealed class User:BaseEntity
     public void RemoveRole(Guid roleId)
     {
         if (roleId == Guid.Empty)
-            throw new InvalidRoleException("Role is null.");
+            throw new InvalidRoleException("Role ID cannot be empty,");
         
         bool isRoleExist=_rolesId.Any(r => r == roleId);
         if (!isRoleExist)

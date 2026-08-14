@@ -1,5 +1,4 @@
 ﻿using Domain.Abstractions;
-using Domain.Products;
 
 namespace Domain.Categories;
 

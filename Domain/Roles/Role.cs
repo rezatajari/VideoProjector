@@ -4,16 +4,16 @@ namespace Domain.Roles;
 
 public class Role:BaseEntity
 {
-    public string Name { get; private set; }
+    public RoleName RoleName { get; private set; }
 
-    private Role(string name)
+    private Role(RoleName roleName)
     {
-        Name = name;
+        RoleName = roleName;
     }
 
-    public static Role Create(string name)
+    public static Role Create(RoleName RoleName)
     {
-        Role role = new Role(name);
+        Role role = new Role(RoleName);
         return role;
     }
 }

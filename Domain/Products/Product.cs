@@ -13,7 +13,7 @@ public sealed class Product:BaseEntity
     public ProductDescription? ProductDescription { get; private set; }
     public Money? SalePrice { get; private set; }
     public int QuantityForSale { get; private set; }
-    public Money RentalPricePerDay { get; private set; }
+    public Money? RentalPricePerDay { get; private set; }
     public int QuantityForRental { get; private set; }
     public string ImageUrl { get;private set; } = "/images/default-projector.png"; 
     public string? TestVideoUrl { get;private set; }
@@ -81,5 +81,11 @@ public sealed class Product:BaseEntity
         
         RentalPricePerDay = rentalPricePerDay;
         QuantityForRental = quantity;
+    }
+
+    public void DisableForRental()
+    {
+        RentalPricePerDay = null;
+        QuantityForRental = 0;
     }
 }

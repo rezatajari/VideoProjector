@@ -14,12 +14,13 @@ public class Email
         if (string.IsNullOrWhiteSpace(value))
             throw new InvalidEmailException("Email cannot be null or empty.");
 
-        var normalizedValue = value.Trim();
+        var normalizedValue = value.Trim().ToLowerInvariant();
         if (normalizedValue.Length > MaxLength)
             throw new InvalidEmailException("Email cannot exceed 100 characters.");
 
-        bool isValid = MailAddress.TryCreate(normalizedValue, out MailAddress mailAddress);
-        if (!isValid)
+        bool isValid = MailAddress.TryCreate(normalizedValue, out MailAddress? mailAddress);
+        
+        if (mailAddress == null || !isValid)
             throw new InvalidEmailException("Invalid email address.");
 
         value = mailAddress.ToString();
