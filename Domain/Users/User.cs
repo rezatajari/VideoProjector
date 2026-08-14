@@ -7,12 +7,12 @@ namespace Domain.Users;
 
 public sealed class User:BaseEntity
 {
-    private readonly List<Role> _roles = [];
+    private readonly List<Guid> _rolesId = [];
     public FullName FullName { get; private set; }
     public Email Email { get;private set; }
     public PasswordHash PasswordHash { get; private set; }
     public PhoneNumber? PhoneNumber { get; private set; }
-    public ICollection<Role> Roles => _roles.AsReadOnly();
+    public ICollection<Guid> RolesId => _rolesId.AsReadOnly();
 
 
     private User(
@@ -37,14 +37,28 @@ public sealed class User:BaseEntity
         return user;
     }
 
-    public void AddRole(Role role)
+    public void AddRole(Guid roleId)
     {
-        if (role == null)
+        if (roleId == Guid.Empty)
             throw new InvalidRoleException("Role is null.");
+                
+        bool isRoleExist=_rolesId.Any(r => r == roleId);
         
-        if (_roles.Contains(role))
+        if (isRoleExist)
             throw new InvalidRoleException("Role already exists.");
         
-        _roles.Add(role);
+        _rolesId.Add(roleId);
+    }
+
+    public void RemoveRole(Guid roleId)
+    {
+        if (roleId == Guid.Empty)
+            throw new InvalidRoleException("Role is null.");
+        
+        bool isRoleExist=_rolesId.Any(r => r == roleId);
+        if (!isRoleExist)
+            throw new InvalidRoleException("Role already doesn't exists.");
+        
+        _rolesId.Remove(roleId);
     }
 }
