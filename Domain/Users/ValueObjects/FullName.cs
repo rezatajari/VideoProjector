@@ -10,7 +10,7 @@ public record class FullName
 
     public FullName(string value)
     {
-        if (string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(value))
+        if (string.IsNullOrWhiteSpace(value))
             throw new InvalidFullNameException("Full name cannot be null or empty.");
 
         var normalizedValue = value.Trim();
