@@ -1,5 +1,6 @@
 ﻿using Domain.Abstractions;
 using Domain.Roles;
+using Domain.Users.Exceptions;
 using Domain.Users.ValueObjects;
 
 namespace Domain.Users;
@@ -35,5 +36,15 @@ public sealed class User:BaseEntity
         User user = new User(fullName, email, passwordHash, phoneNumber);
         return user;
     }
-    
+
+    public void AddRole(Role role)
+    {
+        if (role == null)
+            throw new InvalidRoleException("Role is null.");
+        
+        if (_roles.Contains(role))
+            throw new InvalidRoleException("Role already exists.");
+        
+        _roles.Add(role);
+    }
 }
