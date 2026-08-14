@@ -7,57 +7,93 @@ namespace Domain.Orders;
 
 public sealed class Order : BaseEntity
 {
+    private readonly List<OrderItem> _items = [];
+
     public Guid UserId { get; private set; }
-    public Guid ProductId { get; private set; }
-    public DateRange? Duration { get; private set; }
-    public int Quantity { get; private set; }
-    public Money PricePerUnit { get; private set; }
-    public Money TotalPrice { get; private set; }
+    public IReadOnlyCollection<OrderItem> Items => _items.AsReadOnly();
+    public Money? TotalPrice { get; private set; }
     public OrderStatus Status { get; private set; }
-    public bool IsRental => Duration is not null;
 
-
-    private Order(
-        Guid userId,
-        Guid productId,
-        int quantity,
-        Money pricePerUnit,
-        DateRange? duration = null)
+    private Order(Guid userId)
     {
-        Status = OrderStatus.Pending;
         UserId = userId;
-        ProductId = productId;
-        Duration = duration;
-        Quantity = quantity;
-        PricePerUnit = pricePerUnit;
-        TotalPrice = duration is null
-            ? pricePerUnit * quantity
-            : pricePerUnit * quantity * duration.NumberOfDays;
+        Status = OrderStatus.Pending;
     }
 
-    public static Order CreateForRental(
-        Guid userId,
+    private Order()
+    {
+    }
+
+    public static Order Create(Guid userId)
+    {
+        if (userId == Guid.Empty)
+            throw new ArgumentException("User ID cannot be empty.", nameof(userId));
+
+        return new Order(userId);
+    }
+
+    public OrderItem AddSaleItem(
+        Guid productId,
+        int quantity,
+        Money unitPrice)
+    {
+        EnsureItemsCanBeModified();
+
+        var item = OrderItem.CreateForSale(Id, productId, quantity, unitPrice);
+        AddItem(item);
+
+        return item;
+    }
+
+    public OrderItem AddRentalItem(
         Guid productId,
         DateRange duration,
         int quantity,
-        Money pricePerUnitPerDay)
+        Money unitPricePerDay,
+        DateOnly today)
     {
+        EnsureItemsCanBeModified();
         ArgumentNullException.ThrowIfNull(duration);
-        ValidateCreationArguments(userId, productId, quantity, pricePerUnitPerDay);
 
-        return new Order(userId, productId, quantity, pricePerUnitPerDay, duration);
+        if (duration.Start < today)
+            throw new InvalidDateRangeException("Rental start date cannot be in the past.");
+
+        var item = OrderItem.CreateForRental(
+            Id,
+            productId,
+            duration,
+            quantity,
+            unitPricePerDay);
+        AddItem(item);
+
+        return item;
     }
 
-    public static Order CreateForSale(Guid userId, Guid productId, int quantity, Money pricePerUnit)
+    public void ChangeItemQuantity(Guid orderItemId, int quantity)
     {
-        ValidateCreationArguments(userId, productId, quantity, pricePerUnit);
+        EnsureItemsCanBeModified();
 
-        return new Order(userId, productId, quantity, pricePerUnit);
+        var item = GetItem(orderItemId);
+        item.ChangeQuantity(quantity);
+        RecalculateTotalPrice();
+    }
+
+    public void RemoveItem(Guid orderItemId)
+    {
+        EnsureItemsCanBeModified();
+
+        var item = GetItem(orderItemId);
+        _items.Remove(item);
+        RecalculateTotalPrice();
     }
 
     public void Confirm()
     {
         EnsureStatus(OrderStatus.Pending, OrderStatus.Confirmed);
+
+        if (_items.Count == 0)
+            throw new EmptyOrderException("An order must contain at least one item before confirmation.");
+
         Status = OrderStatus.Confirmed;
     }
 
@@ -81,25 +117,46 @@ public sealed class Order : BaseEntity
         Status = OrderStatus.Completed;
     }
 
-    private static void ValidateCreationArguments(
-        Guid userId,
-        Guid productId,
-        int quantity,
-        Money pricePerUnit)
+    private void AddItem(OrderItem item)
     {
-        if (userId == Guid.Empty)
-            throw new ArgumentException("User ID cannot be empty.", nameof(userId));
+        if (TotalPrice is not null && TotalPrice.Currency != item.LineTotal.Currency)
+            throw new InvalidOrderCurrencyException(
+                "All items in an order must use the same currency.");
 
-        if (productId == Guid.Empty)
-            throw new ArgumentException("Product ID cannot be empty.", nameof(productId));
+        _items.Add(item);
+        RecalculateTotalPrice();
+    }
 
-        if (quantity <= 0)
-            throw new InvalidOrderQuantityException("Order quantity must be greater than zero.");
+    private OrderItem GetItem(Guid orderItemId)
+    {
+        if (orderItemId == Guid.Empty)
+            throw new ArgumentException("Order item ID cannot be empty.", nameof(orderItemId));
 
-        ArgumentNullException.ThrowIfNull(pricePerUnit);
+        return _items.Find(item => item.Id == orderItemId)
+               ?? throw new OrderItemNotFoundException(
+                   $"Order item '{orderItemId}' was not found in order '{Id}'.");
+    }
 
-        if (pricePerUnit.Amount <= 0)
-            throw new InvalidOrderPriceException("Order price must be greater than zero.");
+    private void RecalculateTotalPrice()
+    {
+        if (_items.Count == 0)
+        {
+            TotalPrice = null;
+            return;
+        }
+
+        var total = _items[0].LineTotal;
+        for (var index = 1; index < _items.Count; index++)
+            total += _items[index].LineTotal;
+
+        TotalPrice = total;
+    }
+
+    private void EnsureItemsCanBeModified()
+    {
+        if (Status != OrderStatus.Pending)
+            throw new InvalidOrderStatusTransitionException(
+                $"Order items cannot be modified while the order status is {Status}.");
     }
 
     private void EnsureStatus(OrderStatus requiredStatus, OrderStatus targetStatus)
