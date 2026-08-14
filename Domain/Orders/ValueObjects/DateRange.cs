@@ -1,6 +1,6 @@
 ﻿using Domain.Orders.Exceptions;
 
-namespace Domain.Orders;
+namespace Domain.Orders.ValueObjects;
 
 public sealed record DateRange
 {

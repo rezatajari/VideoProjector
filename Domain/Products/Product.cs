@@ -3,6 +3,7 @@ using Domain.Categories.Exceptions;
 using Domain.Products.Exceptions;
 using Domain.Products.ValueObjects;
 using Domain.Shared;
+using Domain.Shared.ValueObjects;
 
 namespace Domain.Products;
 

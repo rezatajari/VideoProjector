@@ -1,7 +1,9 @@
 ﻿using Domain.Abstractions;
 using Domain.Orders.Enums;
 using Domain.Orders.Exceptions;
+using Domain.Orders.ValueObjects;
 using Domain.Shared;
+using Domain.Shared.ValueObjects;
 
 namespace Domain.Orders;
 

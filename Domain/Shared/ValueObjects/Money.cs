@@ -1,6 +1,6 @@
 ﻿using Domain.Shared.Exceptions;
 
-namespace Domain.Shared;
+namespace Domain.Shared.ValueObjects;
 
 public sealed record Money
 {

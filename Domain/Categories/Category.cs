@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using Domain.Categories.ValueObjects;
 
 namespace Domain.Categories;
 

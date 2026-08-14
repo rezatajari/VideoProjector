@@ -1,6 +1,6 @@
 ﻿using Domain.Categories.Exceptions;
 
-namespace Domain.Categories;
+namespace Domain.Categories.ValueObjects;
 
 public sealed record CategoryName
 {

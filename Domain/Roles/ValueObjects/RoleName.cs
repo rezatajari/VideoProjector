@@ -1,6 +1,6 @@
 ﻿using Domain.Roles.Exceptions;
 
-namespace Domain.Roles;
+namespace Domain.Roles.ValueObjects;
 
 public sealed record RoleName
 {
